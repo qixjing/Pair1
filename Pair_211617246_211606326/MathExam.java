@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,10 +10,7 @@ public class MathExam {
     final static String FILENAME = "out.txt";
     static int num;
     static int grade;
-    static int fuhao;// 一二年级符号
     static String[] operator = {"+", "-", "*", "/"};// 三年级符号
-    static int number1, number2, number3, number4, number5;// 五个运算数
-    static List<Integer> list1, list2;// 用于检查一二年级题目的重复生成
     static List<String> strArrayQ, strArrayA;// 存放题目和答案用于输出到文件
     
     
@@ -52,22 +48,40 @@ public class MathExam {
          * 3.判断题目是否重复
          * 4.存入题目数组并计算结果存入答案数组
          */
+        int number1, number2 = 0;
+        int fuhao = 0;
         int result = 0;
+        // 检查重复
+        List<String> check1 = new ArrayList<String>();
+        List<String> check2 = new ArrayList<String>();
+        String checkRepeat = null;
+        
         strArrayQ = new ArrayList<String>();
         strArrayA = new ArrayList<String>();
+        
         for (int i = 1; i <= num; i++) {
-            number1 = (int)(Math.random()*(GRADE1_MAX)+1);
             fuhao = (int)(Math.random()*2);
             if (fuhao == 0) {
-                number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                do {
+                    // 保证没有重复的式子生成
+                    number1 = (int)(Math.random()*(GRADE1_MAX)+1);
+                    number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                    checkRepeat = number1 + "+" + number2;
+                } while (check1.contains(checkRepeat) || check2.contains(checkRepeat));
+                check1.add(number1 + "+" + number2);
+                check2.add(number2 + "+" + number1);
                 result = number1 + number2;
                 // 记录题目和答案
                 strArrayQ.add("(" + i + ") " + number1 + " + " + number2 + " =");
                 strArrayA.add("(" + i + ") " + number1 + " + " + number2 + " = " + result);
             } else if (fuhao ==1) {
                 do {
+                    // 保证结果不为负数以及没有重复的式子生成
+                    number1 = (int)(Math.random()*(GRADE1_MAX)+1);
                     number2 = (int)(Math.random()*(GRADE1_MAX)+1);
-                } while (number2 >= number1);
+                    checkRepeat = number1 + "-" + number2;
+                } while (number2 > number1 || check1.contains(checkRepeat));
+                check1.add(number1 + "-" + number2);
                 result = number1 - number2;
                 // 记录题目和答案
                 strArrayQ.add("(" + i + ") " + number1 + " - " + number2 + " =");
@@ -84,24 +98,41 @@ public class MathExam {
          * 3.判断题目是否重复
          * 4.存入题目数组并计算结果存入答案数组
          */
+        int number1, number2 = 0;
+        int fuhao = 0;
         int result = 0;
         int yu = 0;
+        // 检查重复
+        List<String> check1 = new ArrayList<String>();
+        List<String> check2 = new ArrayList<String>();
+        String checkRepeat = null;
+        
         strArrayQ = new ArrayList<String>();
         strArrayA = new ArrayList<String>();
         for (int i = 1; i <= num; i++) {
             fuhao = (int)(Math.random()*2);
             if (fuhao == 0) {
-                number1 = (int)(Math.random()*10);
-                number2 = (int)(Math.random()*10);
+                do {
+                    // 保证没有重复的式子生成
+                    number1 = (int)(Math.random()*10);
+                    number2 = (int)(Math.random()*10);
+                    checkRepeat = number1 + "×" + number2;
+                } while (check1.contains(checkRepeat) || check2.contains(checkRepeat));
+                check1.add(number1 + "×" + number2);
+                check2.add(number2 + "×" + number1);
+                
                 result = number1 * number2;
                 // 记录题目和答案
                 strArrayQ.add("(" + i + ") " + number1 + " × " + number2 + " =");
                 strArrayA.add("(" + i + ") " + number1 + " × " + number2 + " = " + result);
             } else if (fuhao == 1) {
-                number1 = (int)(Math.random()*GRADE2_MAX);
                 do {
+                    // 保证除数不为0以及没有重复的式子生成
+                    number1 = (int)(Math.random()*GRADE2_MAX);
                     number2 = (int)(Math.random()*10);
-                } while (number2 <= (number1 / 10) || number2 == 0);
+                    checkRepeat = number1 + "÷" + number2;
+                } while (number2 <= (number1 / 10) || number2 == 0 || check1.contains(checkRepeat));
+                check1.add(number1 + "÷" + number2);
                 result = number1 / number2;
                 yu = number1 % number2;
                 // 记录题目和答案
