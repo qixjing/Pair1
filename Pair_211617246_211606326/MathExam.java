@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class MathExam {
     static String[] operator = {"+", "-", "*", "/"};// 三年级符号
     static int number1, number2, number3, number4, number5;// 五个运算数
     static List<Integer> list1, list2;// 用于检查一二年级题目的重复生成
-    static Set<String> strArrayQ, strArrayA;// 存放题目和答案用于输出到文件
+    static List<String> strArrayQ, strArrayA;// 存放题目和答案用于输出到文件
     
     
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class MathExam {
         
     }
     
-    // 计算后缀表达式的值 */
+    /* 计算后缀表达式的值 */
     private static int calc(String shizi) {
         return 0;
         
@@ -51,6 +52,28 @@ public class MathExam {
          * 3.判断题目是否重复
          * 4.存入题目数组并计算结果存入答案数组
          */
+        int result = 0;
+        strArrayQ = new ArrayList<String>();
+        strArrayA = new ArrayList<String>();
+        for (int i = 1; i <= num; i++) {
+            number1 = (int)(Math.random()*(GRADE1_MAX)+1);
+            fuhao = (int)(Math.random()*2);
+            if (fuhao == 0) {
+                number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                result = number1 + number2;
+                // 记录题目和答案
+                strArrayQ.add("(" + i + ") " + number1 + " + " + number2 + " =");
+                strArrayA.add("(" + i + ") " + number1 + " + " + number2 + " = " + result);
+            } else if (fuhao ==1) {
+                do {
+                    number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                } while (number2 >= number1);
+                result = number1 - number2;
+                // 记录题目和答案
+                strArrayQ.add("(" + i + ") " + number1 + " - " + number2 + " =");
+                strArrayA.add("(" + i + ") " + number1 + " - " + number2 + " = " + result);
+            }
+        }
     }
     
     /* 生成二年级题目 */
@@ -61,6 +84,35 @@ public class MathExam {
          * 3.判断题目是否重复
          * 4.存入题目数组并计算结果存入答案数组
          */
+        int result = 0;
+        int yu = 0;
+        strArrayQ = new ArrayList<String>();
+        strArrayA = new ArrayList<String>();
+        for (int i = 1; i <= num; i++) {
+            fuhao = (int)(Math.random()*2);
+            if (fuhao == 0) {
+                number1 = (int)(Math.random()*10);
+                number2 = (int)(Math.random()*10);
+                result = number1 * number2;
+                // 记录题目和答案
+                strArrayQ.add("(" + i + ") " + number1 + " × " + number2 + " =");
+                strArrayA.add("(" + i + ") " + number1 + " × " + number2 + " = " + result);
+            } else if (fuhao == 1) {
+                number1 = (int)(Math.random()*GRADE2_MAX);
+                do {
+                    number2 = (int)(Math.random()*10);
+                } while (number2 <= (number1 / 10) || number2 == 0);
+                result = number1 / number2;
+                yu = number1 % number2;
+                // 记录题目和答案
+                strArrayQ.add("(" + i + ") " + number1 + " ÷ " + number2 + " =");
+                if (yu == 0) {
+                    strArrayA.add("(" + i + ") " + number1 + " ÷ " + number2 + " = " + result);
+                } else {
+                    strArrayA.add("(" + i + ") " + number1 + " ÷ " + number2 + " = " + result + "..." + yu);
+                }
+            }
+        }
     }
     
     /* 生成三年级题目 */
