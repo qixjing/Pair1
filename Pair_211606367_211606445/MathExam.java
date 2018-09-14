@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class MathExam6367 {
+public class MathExam {
 	static Scanner input = new Scanner(System.in);
 	static String filename ="out.txt";
 	static String[] str = {"+","-","x","÷"};
@@ -22,14 +22,19 @@ public class MathExam6367 {
 	static String word = null,check_message = null;
 	static File file = new File(filename),parent = null;
 	static OutputStream out = null;
-	static String[] args= {" "," "};
+	static String[] arg= {" "," "};
 	static Pattern pattern = Pattern.compile("[0-9]*");
-	public static void main(String[] arg) {
-			
-			args[0] = arg[0];args[1] = arg[1];
+	public static void main(String[] args) {
+			arg[0] = args[0];arg[1] = args[1];
 			file_Initialization(file);//文档初始化生成
 			Input_Message();//输入信息检测
 			//生成合格的题目
+			//运算符在2～4个
+			//可以加括号
+			//减法运算的结果不能有负数
+			//除法运算除数不能为0，不能有余数
+			//数字在0-1000以内，含端点
+			//当然，为一年级、二年级出题的功能还是要保留。
 			for (int i = 1; i <= number; i++) 
 			{
 				number1 = ranNum.nextInt(100);
@@ -80,13 +85,15 @@ public class MathExam6367 {
 		{
 			if(j==1)
 			{
-				check_message =args[0];
+				check_message = arg[0];
 				if(!pattern.matcher(check_message).matches())
 				{	
 					System.out.print("输入的题数不合法！请重新输入题数：");
+					check_message = input.nextLine();
 				}
 			}
-			check_message = input.nextLine();
+			if(j!=1)
+				check_message = input.nextLine();
 			if(!pattern.matcher(check_message).matches())
 			{	
 				System.out.print("输入的题数不合法！请重新输入题数：");
@@ -102,13 +109,15 @@ public class MathExam6367 {
 		{
 			if(j==1)
 			{
-				check_message =args[1];
+				check_message =arg[1];
 				if(!pattern.matcher(check_message).matches())
 				{	
 					System.out.print("输入的年级不合法！请重新输入年级：");
+					check_message = input.nextLine();
 				}
 			}
-			check_message = input.nextLine();
+			if(j!=1)
+				check_message = input.nextLine();
 			if(!pattern.matcher(check_message).matches())
 			{
 				System.out.print("输入的年级不合法!请重新输入年级(1或2)：");
@@ -140,7 +149,7 @@ public class MathExam6367 {
 			out.write((word+"\r\n").getBytes());
 			if(Remainder!=0)
 			{
-				Calculation_problem.add(word+" = "+Integer.toString(Sum)+"..."+Integer.toString(Remainder)+"\n");
+				Calculation_problem.add(word+" = "+Integer.toString(Sum)+"..."+Integer.toString(Remainder)+"\r\n");
 				Calculation_Num++;
 				Remainder = 0;
 			}
