@@ -1,4 +1,7 @@
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -10,12 +13,30 @@ public class MathExam {
     final static String FILENAME = "out.txt";
     static int num;
     static int grade;
+    static String errMessage;
     static String[] operator = {"+", "-", "*", "/"};// 三年级符号
     static List<String> strArrayQ, strArrayA;// 存放题目和答案用于输出到文件
     
     
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) throws IOException {
+        if (checkInput(args)) {
+            switch (grade) {
+            case 1:
+                grade1(num);
+                break;
+            case 2:
+                grade2(num);
+                break;
+            case 3:
+                grade3(num);
+                break;
+            default:
+                break;
+            }
+            createTxt();
+        } else {
+            System.out.println(errMessage);
+        }
     }
     
     /* 检查命令行输入 */
@@ -25,6 +46,71 @@ public class MathExam {
          * 2.检查第1，3个参数是否为"-n"或者"-grade"
          * 3.对应其参数检查其输入合理性，-n要求为正整数且不能太大，-grade要求为1、2、3
          */
+        if (args.length == 4) {
+            if (args[0].equals("-n")) {
+                if (args[2].equals("-grade")) {
+                    // 参数顺序-n -grade
+                    try {
+                        num = Integer.parseInt(args[1]);
+                        if (num < 0) {
+                            errMessage = "题目数量为负！请重新运行！";
+                            return false;
+                        } else if (num == 0 || num > 50) {
+                            errMessage = "请输入合适的题目数量！比如1-50";
+                            return false;
+                        } else {
+                            try {
+                                grade = Integer.parseInt(args[3]);
+                                if (grade == 1 || grade == 2 || grade == 3) {
+                                    return true;
+                                } else {
+                                    errMessage = "年级选择超出范围，请选择一二三年级。";
+                                    return false;
+                                }
+                            } catch (NumberFormatException e) {
+                                errMessage = "年级选择选项非整数！请重新运行！";
+                                return false;
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        errMessage = "题目数量选项非整数！请重新运行！";
+                        return false;
+                    }
+                }
+            } else if (args[0].equals("-grade")) {
+                if (args[2].equals("-n")) {
+                    // 参数顺序-grade -n
+                    try {
+                        grade = Integer.parseInt(args[1]);
+                        if (grade == 1 || grade == 2 || grade == 3) {
+                            try {
+                                num = Integer.parseInt(args[3]);
+                                if (num < 0) {
+                                    errMessage = "题目数量为负！请重新运行！";
+                                    return false;
+                                } else if (num == 0 || num > 50) {
+                                    errMessage = "请输入合适的题目数量！比如1-50";
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            } catch (NumberFormatException e) {
+                                errMessage = "题目数量选项非整数！请重新运行！";
+                                return false;
+                            }
+                        } else {
+                            errMessage = "年级选择超出范围，请选择一二三年级。";
+                            return false;
+                        }
+                    } catch (NumberFormatException e) {
+                        errMessage = "年级选择选项非整数！请重新运行！";
+                        return false;
+                    }
+                }
+            }
+        } else {
+            errMessage = "参数个数有误！请重新运行！";
+        }
         return false;
     }
     
@@ -159,11 +245,38 @@ public class MathExam {
     }
     
     /* 输出到out.txt文件 */
-    private static void craeteTxt() {
+    private static void createTxt() throws IOException {
         /*
          * 1.创建指定文件名的文件
          * 2.依次向文件写入内容
          */
+        File file = new File(FILENAME);
+        file.createNewFile();
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(file);
+            // 具体写入内容
+            for (String s : strArrayQ) {
+                fw.write(s);
+                fw.write("\r\n");
+            }
+            fw.write("\r\n");
+            for (String s : strArrayA) {
+                fw.write(s);
+                fw.write("\r\n");
+            }
+            fw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
     
 }
