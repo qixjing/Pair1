@@ -3,8 +3,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Stack;
 
 public class MathExam {
     
@@ -68,7 +69,7 @@ public class MathExam {
                                     return false;
                                 }
                             } catch (NumberFormatException e) {
-                                errMessage = "年级选择选项非整数！请重新运行！";
+                                errMessage = "年级选择选项非正整数！请重新运行！";
                                 return false;
                             }
                         }
@@ -103,7 +104,7 @@ public class MathExam {
                             return false;
                         }
                     } catch (NumberFormatException e) {
-                        errMessage = "年级选择选项非整数！请重新运行！";
+                        errMessage = "年级选择选项非正整数！请重新运行！";
                         return false;
                     }
                 }
@@ -115,16 +116,113 @@ public class MathExam {
     }
     
     /* 将中缀表达式转换成后缀表达式 */
-    private static String libolan(String shizi) {
-        return shizi;
-        
+    private static List<String> nibolan(List<String> shizi) {
+        /*
+         * 1.遍历中缀表达式
+         * 2.若为操作数，则存入操作数栈
+         * 3.若为左括号"("则直接存入运算符栈
+         *   若为右括号则输出运算符栈中的运算符到操作数栈，直到遇到左括号为止
+         *   若非括号运算符：
+         *      1.若运算符栈顶的运算符为括号，则直接存入运算符栈
+         *      2.若比运算符栈顶的运算符优先级高，则直接存入运算符栈
+         *      3.若比运算符栈顶的运算符优先级低或者相等，则不断输出栈顶运算符到操作数栈，直到栈顶没有运算符的优先级大于或者等于当前运算符，最后将当前运算符压入运算符栈
+         * 4.当表达式读取完成后运算符栈中尚有运算符时，则依序取出运算符到操作数栈，直到运算符栈为空
+         */
+        List<String> list = new ArrayList<String>();
+        Stack stackOper = new Stack();// 符号栈
+        Stack stackNum = new Stack();// 数字栈
+        for (String s : shizi) {
+            if (isNumber(s)) {
+                stackNum.push(s);
+                
+            } else if (s.equals("(")) {
+                stackOper.push(s);
+            } else if (s.equals(")")){
+                while (!stackOper.peek().equals("(")) {
+                    stackNum.push(stackOper.pop());
+                }
+                stackOper.pop();
+            } else {
+                // 当前为+-*/
+                if (stackOper.empty()) {
+                    // 运算符栈为空
+                    stackOper.push(s);
+                } else {
+                    if (stackOper.peek().equals("(")) {
+                        // 运算符栈顶的运算符为括号
+                        stackOper.push(s);
+                    } else {
+                        
+                        if (cmpOper(String.valueOf(stackOper.peek()), s) < 0) {
+                            // 运算符栈顶优先级小于当前符号，压栈
+                            stackOper.push(s);
+                        } else {
+                            stackNum.push(stackOper.pop());
+                            if (stackOper.empty()) {
+                                stackOper.push(s);
+                            } else {
+                                if (cmpOper(String.valueOf(stackOper.peek()), s) >= 0) {
+                                    stackNum.push(stackOper.pop());
+                                    stackOper.push(s);
+                                } else {
+                                    stackOper.push(s);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        while (!stackOper.empty()) {
+            stackNum.push(stackOper.pop());
+        }
+        while (!stackNum.empty()) {
+            list.add(String.valueOf(stackNum.pop()));
+        }
+        Collections.reverse(list);
+        return list;
     }
     
     /* 计算后缀表达式的值 */
-    private static int calc(String shizi) {
-        return 0;
-        
+    private static double calc(List<String> shizi) {
+        /*
+         * 1.遍历后缀表达式，若为操作数，则入栈，若为操作符，则从栈堆弹出两个操作数num1和num2。注意：后弹出的num2是第一操作数，num1是第二操作数
+         * 2.完成计算并将结果压入栈堆
+         * 3.依次操作直到遍历结束，栈堆剩下的最后一个元素即为结果
+         */
+        Stack<String> stack = new Stack<String>();
+        double result = 0;// 运算结果
+        double number1, number2;// 两个运算数
+        String oper;// 运算符号
+        for (String s : shizi) {
+            if (isNumber(s)) {
+                stack.push(s);
+            } else {
+                oper = String.valueOf(s);
+                number1 = Double.parseDouble(stack.pop());
+                number2 = Double.parseDouble(stack.pop());
+                switch (oper) {
+                case "+":
+                    result = number2 + number1;
+                    break;
+                case "-":
+                    result = number2 - number1;
+                    break;
+                case "*":
+                    result = number2 * number1;
+                    break;
+                case "/":
+                    result = number2 / number1;
+                    break;
+                default:
+                    break;
+                }
+                stack.push(String.valueOf(result));
+            }
+        }
+        return Double.parseDouble(stack.pop());
     }
+    
     
     /* 生成一年级题目 */
     private static void grade1(int num) {
@@ -150,8 +248,8 @@ public class MathExam {
             if (fuhao == 0) {
                 do {
                     // 保证没有重复的式子生成
-                    number1 = (int)(Math.random()*(GRADE1_MAX)+1);
-                    number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                    number1 = (int)(Math.random() * (GRADE1_MAX)+1);
+                    number2 = (int)(Math.random() * (GRADE1_MAX)+1);
                     checkRepeat = number1 + "+" + number2;
                 } while (check1.contains(checkRepeat) || check2.contains(checkRepeat));
                 check1.add(number1 + "+" + number2);
@@ -163,8 +261,8 @@ public class MathExam {
             } else if (fuhao ==1) {
                 do {
                     // 保证结果不为负数以及没有重复的式子生成
-                    number1 = (int)(Math.random()*(GRADE1_MAX)+1);
-                    number2 = (int)(Math.random()*(GRADE1_MAX)+1);
+                    number1 = (int)(Math.random() * (GRADE1_MAX)+1);
+                    number2 = (int)(Math.random() * (GRADE1_MAX)+1);
                     checkRepeat = number1 + "-" + number2;
                 } while (number2 > number1 || check1.contains(checkRepeat));
                 check1.add(number1 + "-" + number2);
@@ -175,6 +273,7 @@ public class MathExam {
             }
         }
     }
+    
     
     /* 生成二年级题目 */
     private static void grade2(int num) {
@@ -200,8 +299,8 @@ public class MathExam {
             if (fuhao == 0) {
                 do {
                     // 保证没有重复的式子生成
-                    number1 = (int)(Math.random()*10);
-                    number2 = (int)(Math.random()*10);
+                    number1 = (int)(Math.random() * 10);
+                    number2 = (int)(Math.random() * 10);
                     checkRepeat = number1 + "×" + number2;
                 } while (check1.contains(checkRepeat) || check2.contains(checkRepeat));
                 check1.add(number1 + "×" + number2);
@@ -214,8 +313,8 @@ public class MathExam {
             } else if (fuhao == 1) {
                 do {
                     // 保证除数不为0以及没有重复的式子生成
-                    number1 = (int)(Math.random()*GRADE2_MAX);
-                    number2 = (int)(Math.random()*10);
+                    number1 = (int)(Math.random() * GRADE2_MAX);
+                    number2 = (int)(Math.random() * 10);
                     checkRepeat = number1 + "÷" + number2;
                 } while (number2 <= (number1 / 10) || number2 == 0 || check1.contains(checkRepeat));
                 check1.add(number1 + "÷" + number2);
@@ -237,12 +336,60 @@ public class MathExam {
         /*
          * 1.随机生成符号数量:2-4
          * 2.根据符号数量随机生成符号
-         * 3.根据加减符号数量生成括号数量：0-2
-         * 4.插入括号到合适的位置
-         * 5....待续
-         * 
+         * 3.若生成括号则插入括号到合适的位置
+         * 4.将中缀表达式转换成后缀表达式并计算结果
+         * 5.保存到out.txt
+         * 未完成：
+         * 1.乘号、除号符号未改成书面符号
+         * 2.括号的数量可以为0到2对，只实现了生成一对括号并且括号中只包含一个运算符
+         * 3.题目的最后存在一个空格
+         * 3.运算过程中的减法运算不能保证没有负数
+         * 4.运算过程中的除法运算不能有余数
+         * 5.查重
          */
+        int number;
+        String shizi;
+        
+        strArrayQ = new ArrayList<String>();
+        strArrayA = new ArrayList<String>();
+        for (int j = 1; j <= num; j++) {
+            shizi = "";
+            List<String> exp;// 生成出来的中缀表达式
+            do {
+               // 符号数量2-4
+                int operNum = (int)(Math.random()*3) + 2;
+                exp = new ArrayList<String>();
+                number = (int)(Math.random() * 1001);
+                exp.add(String.valueOf(number));
+                for (int i = 0; i < operNum; i++) {
+                    exp.add(operator[(int)(Math.random() * 4)]);
+                    number = (int)(Math.random() * 1001);
+                    exp.add(String.valueOf(number));
+                    
+                }
+                int size = exp.size();
+                boolean kuohao = Math.random() > 0.5;
+                if (kuohao) {
+                    // 生成括号
+                    int index1 = (int)(Math.random() * (size - 1));
+                    if (index1 % 2 == 0) {
+                    } else {
+                        index1 -= 1;
+                    }
+                    int index2 = index1 + 3;
+                    exp.add(index1, "(");
+                    exp.add(index2 + 1, ")");
+                } 
+            } while (calc(nibolan(exp)) < 0 || calc(nibolan(exp)) % 1 !=0 || calc(nibolan(exp)) > 1000);// 最终结果不能小于0大于1000和小数
+            for (String s : exp) {
+                shizi += s;
+                shizi += " ";
+            }
+            strArrayQ.add("(" + j + ") " + shizi);
+            strArrayA.add("(" + j + ") " + shizi + " = " + (int) calc(nibolan(exp)));
+        }
     }
+    
     
     /* 输出到out.txt文件 */
     private static void createTxt() throws IOException {
@@ -277,6 +424,36 @@ public class MathExam {
                 }
             }
         }
+    }
+    
+    /* 判断字符串是否为数字  */
+    private static boolean isNumber(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    /* 比较两个运算符的优先级 */
+    private static int cmpOper(String op1, String op2) {
+        if (op1.equals("+") || op1.equals("-")) {
+            if (op2.equals("+") || op2.equals("-")) {
+                return 0;
+            } else {
+                // if (op2.equals("*") || op2.equals("/")) {}
+                return -1;
+            }
+        } else {
+            // if (op1.equals("*") || op1.equals("/")) 
+            if (op2.equals("+") || op2.equals("-")) {
+                return 1;
+            } else {
+                // if (op2.equals("*") || op2.equals("/")) {
+                return 0;
+            }
+        } 
     }
     
 }
