@@ -4,13 +4,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class MathExam {
     
     final static int GRADE1_MAX = 20;
     final static int GRADE2_MAX = 90;
+    final static int GRADE3_MAX = 10000;
     final static String FILENAME = "out.txt";
     static int num;
     static int grade;
@@ -152,7 +155,6 @@ public class MathExam {
                         // 运算符栈顶的运算符为括号
                         stackOper.push(s);
                     } else {
-                        
                         if (cmpOper(String.valueOf(stackOper.peek()), s) < 0) {
                             // 运算符栈顶优先级小于当前符号，压栈
                             stackOper.push(s);
@@ -305,7 +307,6 @@ public class MathExam {
                 } while (check1.contains(checkRepeat) || check2.contains(checkRepeat));
                 check1.add(number1 + "×" + number2);
                 check2.add(number2 + "×" + number1);
-                
                 result = number1 * number2;
                 // 记录题目和答案
                 strArrayQ.add("(" + i + ") " + number1 + " × " + number2 + " =");
@@ -340,33 +341,41 @@ public class MathExam {
          * 4.将中缀表达式转换成后缀表达式并计算结果
          * 5.保存到out.txt
          * 未完成：
-         * 1.乘号、除号符号未改成书面符号
-         * 2.括号的数量可以为0到2对，只实现了生成一对括号并且括号中只包含一个运算符
-         * 3.题目的最后存在一个空格
-         * 3.运算过程中的减法运算不能保证没有负数
-         * 4.运算过程中的除法运算不能有余数
-         * 5.查重
+         * 1.括号的数量可以为0到2对，只实现了生成一对括号并且括号中只包含一个运算符
+         * 2.运算过程中的减法运算不能保证没有负数
+         * 3.运算过程中的除法运算不能有余数
          */
         int number;
         String shizi;
+        // 检查重复
+        List<String> check1 = new ArrayList<String>();
+        StringBuffer checkRepeat;
+        Set<String> checkOper;
         
         strArrayQ = new ArrayList<String>();
         strArrayA = new ArrayList<String>();
         for (int j = 1; j <= num; j++) {
             shizi = "";
             List<String> exp;// 生成出来的中缀表达式
+            checkRepeat = new StringBuffer();
             do {
-               // 符号数量2-4
+                // 符号数量2-4
                 int operNum = (int)(Math.random()*3) + 2;
+                checkOper = new HashSet<String>();
                 exp = new ArrayList<String>();
-                number = (int)(Math.random() * 1001);
+                number = (int)(Math.random() * 501);
                 exp.add(String.valueOf(number));
+                checkRepeat.append(String.valueOf(number));
                 for (int i = 0; i < operNum; i++) {
-                    exp.add(operator[(int)(Math.random() * 4)]);
-                    number = (int)(Math.random() * 1001);
+                    String temp = operator[(int)(Math.random() * 4)];
+                    checkOper.add(temp);
+                    exp.add(temp);
+                    checkRepeat.append(temp);
+                    number = (int)(Math.random() * 501);
                     exp.add(String.valueOf(number));
-                    
+                    checkRepeat.append(String.valueOf(number));
                 }
+                check1.add(checkRepeat.toString());
                 int size = exp.size();
                 boolean kuohao = Math.random() > 0.5;
                 if (kuohao) {
@@ -380,13 +389,13 @@ public class MathExam {
                     exp.add(index1, "(");
                     exp.add(index2 + 1, ")");
                 } 
-            } while (calc(nibolan(exp)) < 0 || calc(nibolan(exp)) % 1 !=0 || calc(nibolan(exp)) > 1000);// 最终结果不能小于0大于1000和小数
+            } while (calc(nibolan(exp)) < 0 || calc(nibolan(exp)) % 1 !=0 || calc(nibolan(exp)) > GRADE3_MAX || checkOper.size() < 2 || check1.contains(checkRepeat));// 最终结果不能小于0和小数
             for (String s : exp) {
                 shizi += s;
                 shizi += " ";
             }
-            strArrayQ.add("(" + j + ") " + shizi);
-            strArrayA.add("(" + j + ") " + shizi + " = " + (int) calc(nibolan(exp)));
+            strArrayQ.add("(" + j + ") " + shizi.replace("*", "×").replace("/", "÷").trim());
+            strArrayA.add("(" + j + ") " + shizi.replace("*", "×").replace("/", "÷") + "= " + (int) calc(nibolan(exp)));
         }
     }
     
@@ -442,15 +451,12 @@ public class MathExam {
             if (op2.equals("+") || op2.equals("-")) {
                 return 0;
             } else {
-                // if (op2.equals("*") || op2.equals("/")) {}
                 return -1;
             }
         } else {
-            // if (op1.equals("*") || op1.equals("/")) 
             if (op2.equals("+") || op2.equals("-")) {
                 return 1;
             } else {
-                // if (op2.equals("*") || op2.equals("/")) {
                 return 0;
             }
         } 
