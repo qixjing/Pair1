@@ -13,16 +13,18 @@ public class Calculation {
 
 	public Calculation(String cal_problem) {
 		super();
-		String str = "";
+		String str_char_merge = "";
 		for (int i = 0; i < cal_problem.length(); i++) {
 			if(cal_problem.charAt(i) >= 48 && cal_problem.charAt(i) <= 57)
 			{
 				while(i < cal_problem.length() && cal_problem.charAt(i) >= 48 && cal_problem.charAt(i) <= 57)
 				{
-					str += cal_problem.charAt(i);
+					str_char_merge += cal_problem.charAt(i);
 					i++;
 				}
-				inffix_expression.add(str);str = "";i--;
+				inffix_expression.add(str_char_merge);
+				str_char_merge = "";
+				i--;
 			}
 			else
 			{	
@@ -35,17 +37,16 @@ public class Calculation {
 	 * 中缀表达式转后缀表达式
 	 *
 	 */
-	public void cal()
+	public void To_Suffix_Expression()
 	{
-		String str;
-		int j = 0;
+		String str_char="";
 		for(int i = 0;i < inffix_expression.size();i++) {	
-			str = inffix_expression.get(i);
-			if(str.matches("[0-9]+"))
-				suffix_expression.add(str);	
-			else if(str.equals("("))
-				cal_symbol.push(str);
-			else if(str.equals(")"))
+			str_char = inffix_expression.get(i);
+			if(str_char.matches("[0-9]+"))
+				suffix_expression.add(str_char);	
+			else if(str_char.equals("("))
+				cal_symbol.push(str_char);
+			else if(str_char.equals(")"))
 			{
 				while(!(cal_symbol.peek().equals("(")))
 				{
@@ -55,11 +56,11 @@ public class Calculation {
 			}
 			else
 			{
-				while(cal_symbol.size()!=0 && Oper(cal_symbol.peek(),str))
+				while(cal_symbol.size()!=0 && Oper(cal_symbol.peek(),str_char))
 				{
 					suffix_expression.add(cal_symbol.pop());
 				}
-				cal_symbol.push(str);
+				cal_symbol.push(str_char);
 			}	
 		}
 		while(cal_symbol.size()!=0)
@@ -90,9 +91,8 @@ public class Calculation {
 	 * 后缀表达式（即逆波兰表达式）求和
 	 *
 	 */
-	public boolean suffix_expression_summation()
+	public boolean Suffix_Expression_Summation()
 	{
-		int remainder = 0;
 		for(int i = 0;i < suffix_expression.size();i++) {
 			if(suffix_expression.get(i).matches("\\d+"))
 			{
@@ -108,28 +108,27 @@ public class Calculation {
 				}
 				else if(suffix_expression.get(i).equals("-"))
 				{
-					sum = num1-num2;
+					sum = num2-num1;
 				}
 				else if(suffix_expression.get(i).equals("x"))
 				{
 					sum = num1*num2;
 				}
-				else if(suffix_expression.get(i).equals("÷") && num2==0)
+				else if(suffix_expression.get(i).equals("÷") && num1 == 0)
 				{
 					return false;
 				}
 				else if(suffix_expression.get(i).equals("÷"))
 				{
-					sum = num1/num2;
-					remainder = num1%num2;
-					if(remainder!=0)
+					sum = num2/num1;
+					if(num2%num1 != 0)
 						return false;
 				}
 				cal_sum.push(sum+"");
 			}	
 		}
 		sum = Integer.parseInt(cal_sum.pop());
-		if(sum < 0)
+		if(sum < 0 || sum > 10000)
 			return false;
 		else
 			return true;
@@ -139,7 +138,7 @@ public class Calculation {
 	 * 中缀表达式（生成合格的中缀表达式）word
 	 *
 	 */
-	public void infix_expression()
+	public void Infix_Expression_To_Word()
 	{
 		for (int i = 0; i < inffix_expression.size(); i++) {
 			if(i == inffix_expression.size()-1)
