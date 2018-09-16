@@ -33,10 +33,10 @@ public class MathExamLv2 {
                 }
                 else {
                     //如果读入的操作符为非")"且优先级比栈顶元素的优先级高或一样，则将操作符压入栈
-                    if (priority(operators.peek())<=priority(s)&&!s.equals(")")) {
+                    if (priority(operators.peek())<priority(s)&&!s.equals(")")) {
                         operators.push(s);
                     }
-                    else if(!s.equals(")")&&priority(operators.peek())>priority(s)){
+                    else if(!s.equals(")")&&priority(operators.peek())>=priority(s)){
                         while (operators.size()!=0&&priority(operators.peek())>=priority(s)
                                 &&!operators.peek().equals("(")) {
                             if (!operators.peek().equals("(")) {
@@ -74,8 +74,6 @@ public class MathExamLv2 {
                 iterator.remove();
             }
         }
-        
-        System.out.println("后缀： "+sb);
         calculate();
         //Collections.reverse(output);
     }
@@ -89,10 +87,21 @@ public class MathExamLv2 {
                 if (!mList.isEmpty()){
                     int num1=Integer.valueOf(mList.pop());
                     int num2=Integer.valueOf(mList.pop());
-                   /* if (s.equals("/")&&num1==0){
-                        System.out.println("除数不能为0");
+                    if (s.equals("/") && num1==0){
+                    	answer="wrong";
+                    	sb.setLength(0);
                         return;
-                    }*/
+                    }
+                    if (s.equals("/")&& (num2%num1!=0)){
+                    	answer="wrong";
+                    	sb.setLength(0);
+                        return;
+                    }
+                    if (s.equals("-")&& num2<=num1){
+                    	answer="wrong";
+                    	sb.setLength(0);
+                        return;
+                    }
                     int newNum=cal(num2,num1,s);
                     mList.push(String.valueOf(newNum));
                 }
@@ -237,7 +246,6 @@ public class MathExamLv2 {
 	private static void gradeThree(int n) throws IOException, FileNotFoundException {
 		String[] sum = new String[n];
 		Random random = new Random();
-		MathExamLv2 stack = new MathExamLv2();
 		char[] signSet = { '*', '/' ,'+','-'};
 		for(int i=0;i<n;i++) {
 			int sumOfSign=random.nextInt(3)+1;
@@ -247,7 +255,7 @@ public class MathExamLv2 {
 			}
 			int number[] = new int[4];
 			for(int j=0;j<4;j++) {
-				number[j] = random.nextInt(100) + 1;
+				number[j] = random.nextInt(1000) + 1;
 			}
 			String str= "(" + i + ")" + " " + number[0];
 			for(int k=0;k<sumOfSign;k++) {
@@ -263,7 +271,10 @@ public class MathExamLv2 {
 						t=str.indexOf("+");
 					}
 					int right=str.indexOf(" ", t+2);
-					int left=str.indexOf(" ",t-4);
+					int left=str.indexOf(" ",t-5);
+					if(str.charAt(left)==' ' && !Character.isDigit(str.charAt(left+1)) ) {
+						left=left+1;
+					}
 					StringBuffer sb = new StringBuffer(str);
 					sb.insert(right, " )");
 					sb.insert(left+1, "( ");
@@ -280,6 +291,10 @@ public class MathExamLv2 {
 	        	list.add(arr[q]);
 	        }
 			transferToPostfix(list);
+			if(answer=="wrong") {
+				i=i-1;
+				continue;
+			}
 			sum[i]=answer;
 			list.clear();
 			arr=null;
