@@ -32,7 +32,10 @@ public class MathExam {
 				File_Write_Problem(i);//将这道题目写入文档
 			}
 			if(number != 0)
+			{
 				File_Write_Answer();//将所有题目的答案写入文档
+				System.out.println("题目已经生成，请看out.txt文档");
+			}	
 	}
 	
 	/**
@@ -151,7 +154,7 @@ public class MathExam {
 		else if(args[0].equals("-grade") && args[2].equals("-n"))
 		{	input_args[0] = args[3];input_args[1] = args[1];}
 		else
-			System.out.print("输入有误！！！");		
+			System.out.print("输入有误！！！");	
 		check_input_message = input_args[0];//题数
 		if(!pattern.matcher(check_input_message).matches())
 		{	

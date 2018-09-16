@@ -15,9 +15,9 @@ public class Calculation {
 		super();
 		String str_char_merge = "";
 		for (int i = 0; i < cal_problem.length(); i++) {
-			if(cal_problem.charAt(i) >= 48 && cal_problem.charAt(i) <= 57)
+			if(cal_problem.charAt(i) >= '0' && cal_problem.charAt(i) <= '9')
 			{
-				while(i < cal_problem.length() && cal_problem.charAt(i) >= 48 && cal_problem.charAt(i) <= 57)
+				while(i < cal_problem.length() && cal_problem.charAt(i) >= '0' && cal_problem.charAt(i) <= '9')
 				{
 					str_char_merge += cal_problem.charAt(i);
 					i++;
