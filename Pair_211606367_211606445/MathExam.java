@@ -16,7 +16,8 @@ public class MathExam {
 	static File file = new File(filename),parent = null;
 	static OutputStream out = null;
 	static String[] str_symbol = {"+","-","x","÷"},input_args= {" "," "};
-	static List<String> Calculation_Problem = new ArrayList<String>();
+	static List<String> Calculation_Problem = new ArrayList<String>(),
+						Word_Set = new ArrayList<String>();
 	static int cal_number1 = 0, cal_number2 = 0,symbol = 0, sum = 0, remainder = 0, 
 			   number = -1, grade = -1, 
 			   calculation_num = 0 ,ran_symbol_num = 0,ran_left_parenthesis_num = 0;			
@@ -50,7 +51,7 @@ public class MathExam {
 	 * 
 	 * **/
 	private static void Iteration(int i) {
-		if(grade==1 && symbol<=1)
+		if(grade == 1)
 		{
 			symbol = ranSymbol.nextInt(2);
 			cal_number1 = ranNum.nextInt(101);
@@ -61,10 +62,19 @@ public class MathExam {
 				sum = cal_number1 - cal_number2;
 			else
 				Iteration(i);
-			word = "("+Integer.toString(i)+") "+Integer.toString(cal_number1)+" "+str_symbol[symbol]+" "+Integer.toString(cal_number2);
-			return;
+			word = Integer.toString(cal_number1)+" "+str_symbol[symbol]+" "+Integer.toString(cal_number2);
+			if(Word_Set.contains(word))
+			{
+				Iteration(i);
+			}
+			else
+			{
+				Word_Set.add(word);
+				word = "("+Integer.toString(i)+") "+word;
+				return;
+			}
 		}	
-		else if(grade==2)
+		else if(grade == 2)
 		{	
 			symbol = ranSymbol.nextInt(4);
 			cal_number1 = ranNum.nextInt(101);
@@ -82,10 +92,19 @@ public class MathExam {
 			}
 			else
 				Iteration(i);
-			word = "("+Integer.toString(i)+") "+Integer.toString(cal_number1)+" "+str_symbol[symbol]+" "+Integer.toString(cal_number2);
-			return;
+			word = Integer.toString(cal_number1)+" "+str_symbol[symbol]+" "+Integer.toString(cal_number2);
+			if(Word_Set.contains(word))
+			{
+				Iteration(i);
+			}
+			else
+			{
+				Word_Set.add(word);
+				word = "("+Integer.toString(i)+") "+word;
+				return;
+			}
 		}
-		else if(grade==3)
+		else if(grade == 3)
 		{		
 			cal_number2 = ranNum.nextInt(1001);
 			ran_symbol_num = ranSymbolNum.nextInt(3)+2;
@@ -136,15 +155,22 @@ public class MathExam {
 			calculation.To_Suffix_Expression();
 			if(calculation.Suffix_Expression_Summation())
 			{				
-				word = "("+i+") "+calculation.getword();
+				word = calculation.getword();
 				sum = calculation.getSum();
-				return;
+				if(Word_Set.contains(word))
+				{
+					Iteration(i);
+				}
+				else
+				{
+					word = "("+i+") " + word;
+					Word_Set.add(word);
+					return;
+				}
 			}
 			else
 				Iteration(i);
 		}
-		else
-			Iteration(i);
 	}
 
 	private static void Input_Message(String[] args) {
@@ -159,29 +185,27 @@ public class MathExam {
 		if(!pattern.matcher(check_input_message).matches())
 		{	
 			System.out.print("输入的题数不合法！请重新输入题数：");
-			check_input_message = input.nextLine();
 		}
 		else
 		{
 			number = Integer.parseInt(check_input_message);
-			if(number < 0)
-				System.out.print("输入的题数不合法！请重新输入题数：");
+			if(number > 1000)
+				System.out.print("输入的题数太大！请重新输入题数：");
 		}
 		j++;
-		while(number<0)
+		while(number<0 || number > 1000)
 		{
 			if(j!=1)
 				check_input_message = input.nextLine();
 			if(!pattern.matcher(check_input_message).matches())
 			{	
 				System.out.print("输入的题数不合法！请重新输入题数：");
-				continue;
 			}
 			else
 			{
 				number = Integer.parseInt(check_input_message);
-				if(number < 0)
-					System.out.print("输入的题数不合法！请重新输入题数：");	
+				if(number > 1000)
+					System.out.print("输入的题数太大！请重新输入题数：");
 			}	
 		}
 		j=1;
@@ -189,7 +213,6 @@ public class MathExam {
 		if(!pattern.matcher(check_input_message).matches())
 		{	
 			System.out.print("输入的年级不合法！请重新输入年级：");
-			check_input_message = input.nextLine();
 		}	
 		else
 		{
@@ -205,7 +228,6 @@ public class MathExam {
 			if(!pattern.matcher(check_input_message).matches())
 			{
 				System.out.print("输入的年级不合法!请重新输入年级(1或2或3)：");
-				continue;
 			}
 			else
 			{
@@ -245,6 +267,7 @@ public class MathExam {
 				Calculation_Problem.add(word+" = "+Integer.toString(sum)+"\r\n");
 				calculation_num++;
 			}
+			word = "";
 		} 
 		catch (IOException e) 
 		{
