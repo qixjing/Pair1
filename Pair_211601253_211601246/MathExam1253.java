@@ -18,31 +18,48 @@ import javax.script.ScriptException;
 
 public class MathExam1253 { 
 	public static  void main(String[] args) {
+		if (args.length!=4) {
+			System.out.println("输入有误，程序结束");
+				System.exit(0);
+		}
+		boolean r = args[1].matches("[0-9]+");
+		boolean l = args[3].matches("[0-9]+");
 		int grade = 1;
-		if(args.length==2){
-			if (args[1].equals("1") || args[1].equals("2") || args[1].equals("3")) {
-				grade = Integer.valueOf(args[1]);
-			} else {
+		int n = 0;
+		if(args[0].equals("-n") && args[2].equals("-grade"))
+ 		{
+			if (r == true && l== true) {
+				n = Integer.valueOf(args[1]);
+	 			grade = Integer.valueOf(args[3]);
+			}
+			else {
 				System.out.println("输入有误，程序结束");
 				System.exit(0);
+	 			}
+ 		}
+ 		else if(args[0].equals("-grade") && args[2].equals("-n"))
+ 		{
+ 			if (r == true && l== true) {
+ 	 			grade = Integer.valueOf(args[1]);
+ 	 			n = Integer.valueOf(args[3]);
 			}
+ 			else {
+				System.out.println("输入有误，程序结束");
+				System.exit(0);
+	 			}
+ 		}
+ 		else {
+ 			System.out.println("输入有误，程序结束");
+ 			System.exit(0);
+ 		}
+		if (grade!=1 && grade!=2 && grade!=3) {
+			System.out.println("输入有误，程序结束");
+				System.exit(0);
 		}
-		if(args.length!=1 && args.length!=2 ){
+		if ( n >= 10000 || n == 0) {
 			System.out.println("输入有误，程序结束");
 			System.exit(0);
 		}
-		// TODO Auto-generated method stub
-		boolean r = args[0].matches("[0-9]+");
-		String h = args[0].substring(0, 1);
-		int n = 0;
-		if (r == true && args[0].length() < 5 && h != "0") {
-			n = Integer.valueOf(args[0]);
-		} else {
-			System.out.println("输入有误，程序结束");
-			System.exit(0);
-		}
-
-		
 		Random rand = new Random();
 		if (grade==1) {
 			int d = 0;
