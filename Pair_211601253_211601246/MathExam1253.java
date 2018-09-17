@@ -31,7 +31,6 @@ public class MathExam1253 {
 			System.out.println("输入有误，程序结束");
 			System.exit(0);
 		}
-			
 		// TODO Auto-generated method stub
 		boolean r = args[0].matches("[0-9]+");
 		String h = args[0].substring(0, 1);
@@ -138,9 +137,7 @@ public class MathExam1253 {
 			} catch (Exception e) {
 			}
 		}
-	
 		else {
-			
 			int num = (rand.nextInt(3)+3);
 			ArrayList<String> s1 = new ArrayList<>();
 			ArrayList<String> s2 = new ArrayList<>();
@@ -166,8 +163,7 @@ public class MathExam1253 {
 				}
 				x1 +=" "+a + " "+ c;
 				x2 +=" "+a + " "+ c;
-				x3 +=a+c;
-				
+				x3 +=a+c;	
 			}
 			 anwser(x3);
 			 d = Integer.valueOf(anwser(x3));
@@ -177,8 +173,7 @@ public class MathExam1253 {
 
 			s1.add(y1+"");
 			s2.add(y2+"");
-		    }
-
+			}
 			try {
 				File f = new File("out.txt");
 				PrintStream f1 = new PrintStream(new FileOutputStream(f));
@@ -189,16 +184,11 @@ public class MathExam1253 {
 				System.out.println("\n");
 				for(int k=0;k<s1.size();k++){
 					System.out.println(s2.get(k));
-				}
-				
+				}	
 			} catch (Exception e) {
 			}
 			
 		}
-	}
-	private static void whlie(boolean b) {
-		// TODO Auto-generated method stub
-		
 	}
 	private static char getOperator() {
 		// TODO Auto-generated method stub
@@ -246,14 +236,12 @@ public class MathExam1253 {
 				}else if(sym.get(i).equals("/")){
 					s=num1/num2;
 				}
-				
 				num.set(i, String.valueOf(s));
 				num.remove(i+1);
 				sym.remove(i);
 				i--;
 			}
 		}
-		
 		for(int i=0;i<sym.size();i++) {
 			if(sym.get(i).equals("+")||sym.get(i).equals("-")) {
 				num1=Integer.valueOf(num.get(i));
@@ -269,13 +257,9 @@ public class MathExam1253 {
 				i--;
 
 			}
-
 		}
-
 		return num.get(0);
 	}
-
-
 }
 	
 
