@@ -371,7 +371,22 @@ public class MathExam {
                     checkOper.add(temp);
                     exp.add(temp);
                     checkRepeat.append(temp);
-                    number = (int)(Math.random() * 501);
+                    // 根据运算符合理生成数字
+                    switch (temp) {
+                    case "+":
+                        number = (int)(Math.random() * 1001);
+                        break;
+                    case "-":
+                        number = (int)(Math.random() * 1001);
+                        break;
+                    case "*":
+                        number = (int)(Math.random() * 100);
+                        break;
+                    case "/":
+                        number = (int)(Math.random() * 10);
+                        break;
+                    default:break;   
+                    }
                     exp.add(String.valueOf(number));
                     checkRepeat.append(String.valueOf(number));
                 }
