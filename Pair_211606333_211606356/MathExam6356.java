@@ -13,6 +13,7 @@ public class MathExam6356 {
 	static int[] a;
 	static int[] b;
 	static int[] c;
+	static String str[];
 	static Random fuhao = new Random();
 	static Random num1 = new Random();
 	static Random num2 = new Random();// 种子相同的Random对象，生成的随机数序列是一样的。
@@ -26,7 +27,7 @@ public class MathExam6356 {
 		if (input.length == 0) {
 			// 默认参数
 			n = 10;
-			grade = 1;
+			grade = 3;
 		} else if (input.length == 4) {
 			if (input[0].equals("-n") && input[2].equals("-grade")) {
 				try {
@@ -54,8 +55,7 @@ public class MathExam6356 {
 		} else if(grade==2) {
 			gradeTwo();
 		}else if (grade==3) {
-			System.out.println("制作中");
-			System.exit(0);
+			gradeThree();
 		}else {
 			System.out.println("目前只支持1-3年级，请重新输入");
 		}
@@ -63,6 +63,49 @@ public class MathExam6356 {
 		PrintStream ps = new PrintStream(file);
 		System.setOut(ps);// 把创建的打印输出流赋给系统。
 		outPut();
+	}
+
+	private static void gradeThree() {
+
+		str = new String[n];
+		for(int i=0;i<n;i++) {
+		int n1 =num1.nextInt(2)+2;// 随机符号的个数
+		a = new int[n1];// 运算符个数
+		b=new int [n1+1];// 数字的个数
+		String fuhao[]= {"+","-","×","/"};
+		String fuhao1[]=new String[4];	//判断符号
+		for(int j=0; j<n1; j++){
+			a[j]=num1.nextInt(3);
+			fuhao1[j]=fuhao[a[j]];// 随机生成n1个运算符
+			}
+		
+		for(int k =0;k<n1+1;k++) {
+			b[k]=num2.nextInt(100);// 根据运算符个数随机生成n+1个数字
+		}
+		
+		String ss=Integer.toString(b[0]);//用来保存一个算式，让它先为一个数字
+		
+		for(int x=0;x<n1;x++) {
+			//String ss=Integer.toString(b[0]);//用来保存一个算式，让它先为一个数字
+			if(fuhao1[x].equals("+")||fuhao1[x].equals("-")) {
+				int n2=(int)(0+Math.random()*(2-1+1));//随机生成0或1，用来随机生成加减法的括号
+				if(n2==0) {
+					ss="("+ss+fuhao1[x]+b[x+1]+")";
+				}
+				if(n2==1) {
+					ss=ss+fuhao1[x]+b[x+1];	
+				}	
+			}
+			else {
+				ss=ss+fuhao1[x]+b[x+1];
+			}	
+			
+		}
+		str[i]=ss;
+		
+	}
+	
+		
 	}
 
 	private static void gradeTwo() {
@@ -92,12 +135,17 @@ public class MathExam6356 {
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "-" + b[i] + " =");
 				}
-			} else {
+			} else if(grade==2) {
 				if (c[i] == 0) {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "*" + b[i] + " =");
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "/" + b[i] + " =");
 				}
+			}else {
+				
+				System.out.println("("+i+") "+str[i]);
+			
+				
 			}
 		}
 		System.out.println("--------------标准答案----------------");
@@ -108,7 +156,7 @@ public class MathExam6356 {
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "-" + b[i] + " =" + " " + (a[i] - b[i]));
 				}
-			} else {
+			} else if(grade==2){
 				if (c[i] == 0) {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "*" + b[i] + " =" + " " + (a[i] * b[i]));
 				} else if (a[i] % b[i] == 0) {
@@ -118,6 +166,8 @@ public class MathExam6356 {
 							+ (a[i] % b[i]));
 
 				}
+			}else {
+				System.out.println("制作中");
 			}
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
