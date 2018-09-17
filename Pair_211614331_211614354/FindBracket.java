@@ -13,7 +13,9 @@ public class FindBracket extends Operation{                            // 找呀找
 	public  void findOne(String sProblem) {                              // 找到一个小括号！！！
 			
 		LinkedList<String> sInitialProblemSet = new LinkedList<String>(); 		// 初始题目（用来运算括号以后方便删除内容）
-				
+		Arithmetic sendToArithmetic = new Arithmetic();							// 创建四则运算对象，用于把找出的内容传入四则运算
+		
+		
 		for(int i = 0; i < sProblem.length(); i++) {                    				// 把接受到的题目转存到初始题目的集合中
 			sInitialProblemSet.add(String.valueOf(sProblem.charAt(i)));
 		}
@@ -26,23 +28,25 @@ public class FindBracket extends Operation{                            // 找呀找
 				
 				for(int j = sRight-1; j >= 0; j--) {         						// 从当前右括号往前找第一个左括号
 					
+						
 					if(sInitialProblemSet.get(j).equals("(")) {
 						sInitialProblemSet.set(j, "!");						// 改变标志左括号
 						sLeft = j;             									// 记录左括号位置
 						break;
 					}
+				
 				}
 				
+								
 				for( int z = sLeft + 1; z < sRight; z++)							// 循环遍历，找出左右括号之间的数
 				{   						
 					sPart = sPart + sInitialProblemSet.get(z);					// 把找出来的数拼接起来，作为括号内题目的一部分
 					
 				}
-				
-				@SuppressWarnings("unused")
-				Arithmetic ar = new Arithmetic(sPart);						// 把sPart作为参数，传入四则运算类
-																			
-				sInitialProblemSet.set( sLeft, String.valueOf(getAnswerNumber()) );
+							
+																
+				sendToArithmetic.arithmeticOne(sPart);						// 把sPart作为参数，传入四则运算类															
+				sInitialProblemSet.set( sLeft, String.valueOf(getAnswerNumber()) );	// 把答案设置到左括号中，为下一步删除其他元素做准备
 																				
 				for(int m = 1; m <= sRight-sLeft ; m++){
 																
@@ -62,8 +66,8 @@ public class FindBracket extends Operation{                            // 找呀找
 		for(int i = 0; i < sInitialProblemSet.size(); i++) {			// 把最后无括号的式子传入四则运算符号
 			sPart = sPart + sInitialProblemSet.get(i);
 		}
-		@SuppressWarnings("unused")
-		Arithmetic arS = new Arithmetic(sPart);
+		
+		sendToArithmetic.arithmeticOne(sPart);				// 把最后无括号的式子传入四则运算符号
 																	
 	}//findOne
 	

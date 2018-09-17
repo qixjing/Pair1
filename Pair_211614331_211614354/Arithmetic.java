@@ -4,19 +4,15 @@ import java.util.regex.Pattern;
 
 public class Arithmetic extends Operation{                                           // 四则混合运算
 	
-
+	String sPart = "";
 	
-	public Arithmetic(String sPart) {
-		setAnswerNumber(Integer.valueOf(arithmeticOne(sPart)));
-	}
-		
-	public static  String arithmeticOne(String sPart) {                                     // 混合运算一个题目   
+	public  void arithmeticOne(String sPart) {                                     // 混合运算一个题目   
 		
 		// (本方法的目标)转换字符串，把多个字符变成有意义的数字 
 		// 并返回当前题目的答案给找 括号类(FindBracket)
 				
-		final Matcher findNumber = Pattern.compile("(\\d+)").matcher(sPart);               // 正则查找字符串中的数字
-		final Matcher findSymbol = Pattern.compile("[\\+\\-\\*\\/]").matcher(sPart);     //  正则查找字符串中的符号
+		 Matcher findNumber = Pattern.compile("(\\d+)").matcher(sPart);               // 正则查找字符串中的数字
+		 Matcher findSymbol = Pattern.compile("[\\+\\-\\*\\/]").matcher(sPart);     //  正则查找字符串中的符号
 			
 		LinkedList<String> numberSet = new LinkedList<String>();                   // 存数字的集合
 		LinkedList<String> symbolSet = new LinkedList<String>();					 // 存符号的集合
@@ -33,7 +29,8 @@ public class Arithmetic extends Operation{                                      
 		addAndSubtract(numberSet,symbolSet);									// 调用加减运算 
 				
 		 System.out.println(" 运算：" + answerNumber);
-		return numberSet.get(0);                									// 得到了当前题目的最终答案
+		 
+		 setAnswerNumber(Integer.valueOf(answerNumber));              		// 得到了当前题目的最终答案
 				
 	}
 	
@@ -51,8 +48,9 @@ public class Arithmetic extends Operation{                                      
 				if (symbolSet.get(i).equals("*")) { 											// 判断当前符号集合的符号，算乘法
 					answerNumber = firstNumber * secondNumber; 						// 算结果，保存于answerNumber中
 																																						
-				} else if (symbolSet.get(i).equals("/")) { 									// 算除法
+				} else if (symbolSet.get(i).equals("/")) { // 算除法
 					answerNumber = firstNumber / secondNumber;
+					
 					
 				}
 				
@@ -77,14 +75,19 @@ public class Arithmetic extends Operation{                                      
 					answerNumber = firstNumber + secondNumber;
 																																	
 				} else if (symbolSet.get(i).equals("-")) { 								// 算减法
+					
 					answerNumber = firstNumber - secondNumber;
-																																											
+					
+						
 				}
 				
-				numberSet.set(i, String.valueOf(answerNumber));
-				numberSet.remove(i + 1); 												// 删掉后一个数
-				symbolSet.remove(i);
-				i--;
+				
+					numberSet.set(i, String.valueOf(answerNumber));
+					numberSet.remove(i + 1); 												// 删掉后一个数
+					symbolSet.remove(i);
+					i--;
+				
+				
 			}
 		}
 	}
