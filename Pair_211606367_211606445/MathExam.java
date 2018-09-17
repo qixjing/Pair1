@@ -104,7 +104,7 @@ public class MathExam {
 					j--;
 					continue;
 				}
-				else if(ran_left_parenthesis_num % 2 == 1 && j <= ran_symbol_num-2)
+				else if(ran_left_parenthesis_num % 2 == 1 && j <= ran_symbol_num-1)
 				{	
 					if(j == 1)
 					{
@@ -115,9 +115,8 @@ public class MathExam {
 						symbol = ranSymbol.nextInt(2) + 2;
 						cal_number2 = ranNum.nextInt(1001);
 						word = word+str_symbol[symbol]+Integer.toString(cal_number2);
-						j++;
 					}
-					else if(j <= ran_symbol_num-2)
+					else if(j <= ran_symbol_num-1)
 					{
 						word = word + str_symbol[symbol] + "("+Integer.toString(cal_number2);
 						if(symbol == 0 || symbol == 1)
@@ -127,6 +126,7 @@ public class MathExam {
 						cal_number2 = ranNum.nextInt(1001);
 						word = word + str_symbol[symbol] + Integer.toString(cal_number2)+")";
 					}
+					j++;
 					continue;
 				}
 				word = word+str_symbol[symbol]+Integer.toString(cal_number2);
