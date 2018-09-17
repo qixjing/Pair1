@@ -1,4 +1,3 @@
-
 import java.util.Stack;
 
 //使用逆波兰表达式计算
@@ -15,7 +14,7 @@ public class Calculate {
 
 	// 题目的字符串
 	public static int slen;
-	public static String[] scut = new String[20];
+	public static String[] scut = new String[100];
 	public static String squestion;
 	// 存操作符的栈
 	public static Stack<String> soperators = new Stack<>();
@@ -63,6 +62,8 @@ public class Calculate {
 
 	public static int priority(String str) {
 		switch (str) {
+		case "(":
+			return 0;
 		case "+":
 		case "-":
 			return 1;
@@ -79,19 +80,27 @@ public class Calculate {
 	public static void reversePolishNotation() {
 
 		for (int i = 0; i < slen; i++) {
-			if (!(scut[i].equals("+") || scut[i].equals("-") || scut[i].equals("*") || scut[i].equals("/"))) {
+			if (!(scut[i].equals("+") || scut[i].equals("-") || scut[i].equals("*") || scut[i].equals("/") || scut[i].equals("(") ||  scut[i].equals(")"))) {
 				srpn.push(scut[i]);
 			} else {
-				if (soperators.isEmpty()) {
+				if (soperators.isEmpty() || scut[i].equals("(")) {
 					soperators.push(scut[i]);
 				} else {
 					if (priority(scut[i]) > priority(soperators.peek())) {
 						soperators.push(scut[i]);
 					} else {
-						while ((!soperators.isEmpty()) && (priority(soperators.peek()) >= priority(scut[i]))) {
-							srpn.push(soperators.pop());
+						if(scut[i].equals(")")) {
+							while (!soperators.peek().equals("(")) {
+								srpn.push(soperators.pop());
+							}
+							soperators.pop();
+						}else {
+							while ((!soperators.isEmpty()) && (priority(soperators.peek()) >= priority(scut[i]))) {
+								srpn.push(soperators.pop());
+							}
+							soperators.push(scut[i]);
 						}
-						soperators.push(scut[i]);
+						
 					}
 				}
 			}
