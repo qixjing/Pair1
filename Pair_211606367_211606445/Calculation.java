@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class Calculation {
 	int sum = 0;
-	String word = "";;
+	String word = "";
 	String[] cal_str = {"+","-","x","¡Â"};
 	List<String> inffix_expression = new ArrayList<String>();
 	List<String> suffix_expression = new ArrayList<String>();
