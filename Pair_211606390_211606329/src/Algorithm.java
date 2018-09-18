@@ -43,7 +43,19 @@ public class Algorithm {
     	if(grade==3) {
     		CalculationThree();
     	}
+    	if(grade==2) {
+    		CalculationTwo();
+    	}
+    	if(grade==1) {
+    		CalculationOne();
+    	}
     }
+    private void CalculationOne() {
+		
+	}
+    private void CalculationTwo() {
+		
+	}
     private void CalculationThree()
     {
     	File file=new File("out.txt");
