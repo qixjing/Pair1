@@ -249,7 +249,8 @@ public class MathExam {
 		for (int j = 0; j < n; j++) {
 			// 用来随机符号的个数2-4个
 			int p = (int) (2 + Math.random() * (4 - 2 + 1));
-			prob1 = "";
+			prob = "(" + (j+1)+ ")";
+			prob1="";
 			// 数值位数加符号位数应该是(2*符号位数+1)
 			for (int i = 0; i < (2 * p) + 1; i++) {
 				// 用来判断数值位应该出现的位置
@@ -271,12 +272,20 @@ public class MathExam {
 					pro.add(sym);
 				}
 			}
-			// 将被拆分的题目转成字符串
+			// 将被拆分的题目转成不带题号的字符串
 			for (String str : pro) {
-				prob1 += str;
+				prob1+=str;
+			}
+			//将被拆分的题目转成带题号的字符串
+			for (String str : pro) {
+				prob+=" ";
+				prob+=str;
 			}
 			pro.clear();
-			probs.add(prob1);
+			//
+			ans = prob + " " + "=" + " " + Calculate.ans(prob1);
+			probs.add(prob);
+			anss.add(ans);
 		}
 
 		File file = new File("out.txt");
@@ -305,7 +314,7 @@ public class MathExam {
 					System.out.println("写入错误!");
 				}
 			}
-			String fg = "" + "\r\n";
+			String fg ="\r\n";
 			data = fg.getBytes();
 			try {
 				out.write(data);
