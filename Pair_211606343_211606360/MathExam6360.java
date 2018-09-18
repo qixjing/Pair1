@@ -1,4 +1,3 @@
-//给式子添加了括号判断，并在逆波兰中加入判断左右括号的判断，并将其压入栈中或者提取出栈，添加进线性表内。
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,11 +14,11 @@ import java.util.regex.Pattern;
 
 public class MathExam6360 {
 	
-	String Date[] = new String[1000];
-	String QT[] = new String[10000];				//定义全局变量，存放问题
-	String QT_1[] = new String[10000];
-	String ORDER[] = new String[10000];			//定义存放序号的数组。
-	String AS[] = new String[10000];				//定义全局变量，存放问题和答案
+	String Date[] = new String[100];
+	String QT[] = new String[1000];				//定义全局变量，存放问题
+	String QT_1[] = new String[1000];
+	String ORDER[] = new String[1000];			//定义存放序号的数组。
+	String AS[] = new String[1000];				//定义全局变量，存放问题和答案
 	String SymB[] = {"+","-","×","÷"};
 	String NL ="\r\n";							//定义全局变量
 	byte[] question;							//定义全局变量
@@ -27,9 +26,10 @@ public class MathExam6360 {
 	byte[] answer;								//定义全局变量
 	byte[] order;
 	byte[] date;
+
 	
 	
-	 public static int Level(String operation){
+	 public static int Level(String operation){  						//优先级判断。
 	     int result;
 	     switch (operation){
 	         case "+":
@@ -52,30 +52,46 @@ public class MathExam6360 {
 	 }
 	 
 	 
-	public MathExam6360(String args[]) {		//构造函数
+	public MathExam6360(String args[]) {											//构造函数
 		// TODO Auto-generated constructor stub
-		int num[] = new int[5];					//定义数组num
-		num [1] = Integer.parseInt(args[1]);	//将参数转化为整型
-		num [0] = Integer.parseInt(args[0]);
-		boolean B =judge(num[0],num[1]);		//判断参数的格式以及大小是否符合
-		if(B==true) {							
-			calculate(num[0], num[1]);			//根据年级随机生成式子
-			TxT(num[0]);						//创建文本，并将式子写入文本当中		
+		boolean B;
+		if(args[0].equals("-n") && args[2].equals("-grade"))  						//判断参数数量和年级的顺序。
+		{
+			B =judge(args[1],args[3]);												//判断参数的格式以及大小是否符合
+			if(B==true) {	
+				
+				calculate(Integer.parseInt(args[1]), Integer.parseInt(args[3]));	//根据年级随机生成式子
+				TxT(Integer.parseInt(args[1]));										//创建文本，并将式子写入文本当中		
+			}else 
+				{System.out.println("输入错误，没机会输入了。");}
+			
 		}
-		else {
-			System.out.println("输入错误。没机会输入了。滚！");
+		else if(args[0].equals("-grade") && args[2].equals("-n")) {
+			
+			B =judge(args[3],args[1]);												//判断参数的格式以及大小是否符合
+			if(B==true) {	
+				
+				calculate(Integer.parseInt(args[3]), Integer.parseInt(args[1]));	//根据年级随机生成式子
+				TxT(Integer.parseInt(args[3]));										//创建文本，并将式子写入文本当中
+						
+			}else 
+				{System.out.println("输入错误，没机会输入了。");}
+			
 		}
+		else
+			{System.out.println("输入错误，没机会输入了。");}
+		
 	}
 	
 
 	private  void TxT(int count) {
-    
-		DateFormat dt = DateFormat.getDateTimeInstance(); 		//获取当前时间
+		
+		DateFormat dt = DateFormat.getDateTimeInstance(); 							//获取当前时间
 		Date[0] = dt.format(new Date());
 		
 		
-		File file = new File("out6343.txt");  	//创建文本
-		if(!file.exists())						//判断TXT是否存在
+		File file = new File("out6343.txt");  										//创建文本
+		if(!file.exists())															//判断TXT是否存在
 		{
 		try {
 			file.createNewFile();
@@ -124,24 +140,20 @@ public class MathExam6360 {
 		
 	}
 	
-	private  boolean judge(int count ,int grade) {
-		String Regex="[1-9]{1}[0-9]{0,2}";   //正则表达式，将输入的参数限定在正整数范围内，同时给予最大极限。
-		String Regex2="[1-3]{1}{0}";         //正则表达式，将输入的参数限定在正整数范围内，同时给予最大极限。
+	private  boolean judge(String count ,String grade) {    //判断参数格式是否正确的方法。
+		String Regex="[1-9]{1}[0-9]{0,2}";   				//正则表达式，将输入的参数限定在正整数范围内，同时给予最大极限。
+		String Regex2="[1-3]{1}{0}";        				//正则表达式，将输入的参数限定在正整数范围内，同时给予最大极限。
 		
 		
 		Pattern p =Pattern.compile(Regex);
 		Pattern p2 =Pattern.compile(Regex2);
 		
 		
-		String str = String.valueOf(count);   //强制将int类型转换为string类型
-		String str2 = String.valueOf(grade);
+		Matcher M=p.matcher(count);         				//进行判断
+		Matcher M2=p2.matcher(grade);			
 		
 		
-		Matcher M=p.matcher(str);             //进行判断
-		Matcher M2=p2.matcher(str2);			
-		
-		
-		return M.matches() && M2.matches();   //返回boolean类型的值
+		return M.matches() && M2.matches();   				//返回boolean类型的值
 		
 	}
 	
@@ -165,9 +177,9 @@ public class MathExam6360 {
 	
 	private void  calculate_1(int count) {					//一年级计算
 		for(int i=1;i<=count;) {
-			int a=(int)(Math.random()*10+1);
-			int b=(int)(Math.random()*10+1);
-			int symbol=(int)(Math.random()*2);
+			int a=(int)(Math.random()*10+1);				//随机第一个数字
+			int b=(int)(Math.random()*10+1);				//随机第二个数字
+			int symbol=(int)(Math.random()*2);				//随机符号。
 		
 			if(symbol==0) {
 				QT[i-1]=a + " + " + b;
@@ -186,9 +198,9 @@ public class MathExam6360 {
 	private void  calculate_2(int count) {					//二年级计算
 		for(int i=1;i<=count;) {
 			
-			int a=(int)(Math.random()*100);
-			int b=(int)(Math.random()*100);
-			int symbol=(int)(Math.random()*4);
+			int a=(int)(Math.random()*100);					//随机第一个数字
+			int b=(int)(Math.random()*100);					//随机第二个数字
+			int symbol=(int)(Math.random()*4);				//随机符号。
 		
 			if(symbol==0) {
 				QT[i-1]=a + " + " + b;
@@ -228,98 +240,113 @@ public class MathExam6360 {
 	     int i=0;
 	    while(i<count){
 	    	  	
-	    	  	int symbol_number=(int)(Math.random()*5+2);   //随机生成数字，用于判断符号个数
-	    	  	int a=(int)(Math.random()*1000);
-	  			int b=(int)(Math.random()*1000);
-	  			int c=(int)(Math.random()*1000);
-	  			int symbol_1=(int)(Math.random()*4);
-	  			int symbol_2=(int)(Math.random()*4);
+	    	  	int symbol_number=(int)(Math.random()*5+2);				   	//随机生成数字，用于判断符号个数
+	    	  	int number_1=(int)(Math.random()*1000);		 				//随机生成第一个数字
+	  			int number_2=(int)(Math.random()*1000+1);				 	//随机生成第二个数字
+	  			int number_3=(int)(Math.random()*1000+1);					//随机生成第三个数字
+	  			int symbol_1=(int)(Math.random()*4);						//随机生成第一个符号
+	  			int symbol_2=(int)(Math.random()*4);						//随机生成第二个符号
 	  			
 	  			if(symbol_number == 2) {
-	  				if(symbol_1==symbol_2)					//保证至少有两种运算符号。
+	  				if(symbol_1==symbol_2)									//保证至少有两种运算符号。
 	  					{continue;}
-	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
-			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c;
-			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c;
+	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {		//比较第一个符号和第二个符号的优先级，并添加括号。
+			  			QT_1[i]="("+number_1+SymB[symbol_1]+number_2+")"+SymB[symbol_2]+number_3;
+			  			QT[i]="( "+number_1+" "+SymB[symbol_1]+" "+ number_2 +" ) "+SymB[symbol_2] +" " +number_3;
 	  				}
 	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2]))  {
-			  			QT_1[i]=+a+SymB[symbol_1]+"(" + b +SymB[symbol_2]+c+")";
-			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]  +c+" ) ";
+			  			QT_1[i]=+number_1+SymB[symbol_1]+"(" + number_2 +SymB[symbol_2]+number_3+")";
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" ( "+ number_2 +" "+SymB[symbol_2]  +number_3+" ) ";
 	  				}
 	  				else {
-	  					QT_1[i]=+a+SymB[symbol_1]+b+SymB[symbol_2]+c;
-			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" "+c;
+	  					QT_1[i]=+number_1+SymB[symbol_1]+number_2+SymB[symbol_2]+number_3;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 +" "+SymB[symbol_2] +" "+number_3;
 	  				}
-	  				
-		  			}
+		  		}
+	  			//判断运算符为两个之后，开始判断符号优先级，并在式子里添加括号。
 	  			
-	  			else if(symbol_number == 3) {
-	  				if(symbol_1==symbol_2)
-	  				{continue;}
-	  				int d=(int)(Math.random()*1000);
+	  			
+	  			else if(symbol_number == 3) {	
+	  				if(symbol_1==symbol_2)		//保证式子内至少有两种运算符号
+	  				{continue;}		
+	  				int number_4=(int)(Math.random()*1000+1);
 	  				int symbol_3=(int)(Math.random()*4);
 	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
-			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c+SymB[symbol_3]+d;
-			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3]+" "+d;
+			  			QT_1[i]="("+number_1+SymB[symbol_1]+number_2+")"+SymB[symbol_2]+number_3+SymB[symbol_3]+number_4;
+			  			QT[i]="( "+number_1+" "+SymB[symbol_1]+" "+ number_2 +" ) "+SymB[symbol_2] +" " +number_3+" "+SymB[symbol_3]+" "+number_4;
 	  				}
 	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2]))  {
-			  			QT_1[i]=+a+SymB[symbol_1]+"(" + b +SymB[symbol_2]+c+")"+SymB[symbol_3]+d;
-			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]  +c+" ) "+SymB[symbol_3]+" "+d;
+			  			QT_1[i]=+number_1+SymB[symbol_1]+"(" + number_2 +SymB[symbol_2]+number_3+")"+SymB[symbol_3]+number_4;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" ( "+ number_2 +" "+SymB[symbol_2]  +number_3+" ) "+SymB[symbol_3]+" "+number_4;
 	  				}
 	  				else if(Level(SymB[symbol_2])>Level(SymB[symbol_3]))  {
-			  			QT_1[i]=+a+SymB[symbol_1]+ b +SymB[symbol_2]+"("+c +SymB[symbol_3]+d+")";
-			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" ( " +c+" "+SymB[symbol_3]+" "+d+" ) ";
+			  			QT_1[i]=+number_1+SymB[symbol_1]+ number_2 +SymB[symbol_2]+"("+number_3 +SymB[symbol_3]+number_4+")";
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 +" "+SymB[symbol_2] +" ( " +number_3+" "+SymB[symbol_3]+" "+number_4+" ) ";
 	  				}
 	  				else {
-	  					QT_1[i]=+a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+d;
-			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" "+c+" "+SymB[symbol_3]+" "+d;
+	  					QT_1[i]=+number_1+SymB[symbol_1]+number_2+SymB[symbol_2]+number_3+SymB[symbol_3]+number_4;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 +" "+SymB[symbol_2] +" "+number_3+" "+SymB[symbol_3]+" "+number_4;
 	  				}
-	  				
-		  			}
+		  		}
+	  		//判断运算符为三个之后，开始判断符号优先级，并在式子里添加括号。
 	  			
 	  			
 	  			else if(symbol_number == 4) {
-	  				if(symbol_1==symbol_2)
+	  				if(symbol_1==symbol_2)								//保证式子至少有两种运算符号
 	  				{continue;}
-	  				int d=(int)(Math.random()*1000);
-	  				int e=(int)(Math.random()*1000);
+	  				int number_4=(int)(Math.random()*1000+1);
+	  				int number_5=(int)(Math.random()*1000+1);
 	  				int symbol_3=(int)(Math.random()*4);
 	  				int symbol_4=(int)(Math.random()*4);
+	  				
 	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
-			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
-			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3]+" "+d+" "+SymB[symbol_4]+" "+e;
+			  			QT_1[i]="("+number_1+SymB[symbol_1]+number_2+")"+SymB[symbol_2]+number_3+SymB[symbol_3]+number_4+SymB[symbol_4]+number_5;
+			  			QT[i]="( "+number_1+" "+SymB[symbol_1]+" "+ number_2 +" ) "+SymB[symbol_2] +" " +number_3+" "+SymB[symbol_3]+" "+number_4+" "+SymB[symbol_4]+" "+number_5;
 	  				}
+	  				
+	  				
 	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2])) {
-			  			QT_1[i]=a+SymB[symbol_1]+"("+b+SymB[symbol_2]+c+")"+SymB[symbol_3]+d+SymB[symbol_4]+e;
-			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]+" "+c+" ) "+SymB[symbol_3]+" "+d+" "+SymB[symbol_4]+" "+e;
+			  			QT_1[i]=number_1+SymB[symbol_1]+"("+number_2+SymB[symbol_2]+number_3+")"+SymB[symbol_3]+number_4+SymB[symbol_4]+number_5;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" ( "+ number_2 +" "+SymB[symbol_2]+" "+number_3+" ) "+SymB[symbol_3]+" "+number_4+" "+SymB[symbol_4]+" "+number_5;
 	  				}
+	  				
+	  				
 	  				else if(Level(SymB[symbol_2])>Level(SymB[symbol_3])) {
-			  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+"("+c+SymB[symbol_3]+d+")"+SymB[symbol_4]+e;
-			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b + " "+SymB[symbol_2]+" ( "+c+" "+SymB[symbol_3]+" "+d+" ) "+" "+SymB[symbol_4]+" "+e;
+			  			QT_1[i]=number_1+SymB[symbol_1]+number_2+SymB[symbol_2]+"("+number_3+SymB[symbol_3]+number_4+")"+SymB[symbol_4]+number_5;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 + " "+SymB[symbol_2]+" ( "+number_3+" "+SymB[symbol_3]+" "+number_4+" ) "+" "+SymB[symbol_4]+" "+number_5;
 	  				}
+	  				
+	  				
 	  				else if(Level(SymB[symbol_3])>Level(SymB[symbol_4])) {
-			  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+"("+d+SymB[symbol_4]+e+")";
-			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b + " "+SymB[symbol_2]+" "+c+" "+SymB[symbol_3]+" ( "+d+" "+SymB[symbol_4]+" "+e+" )";
+			  			QT_1[i]=number_1+SymB[symbol_1]+number_2+SymB[symbol_2]+number_3+SymB[symbol_3]+"("+number_4+SymB[symbol_4]+number_5+")";
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 + " "+SymB[symbol_2]+" "+number_3+" "+SymB[symbol_3]+" ( "+number_4+" "+SymB[symbol_4]+" "+number_5+" )";
 	  				}
+	  				
+	  				
 	  				else {
-		  			QT_1[i]=a+SymB[symbol_1]+ b+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
-		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3] +" "+d+" "+SymB[symbol_4]+" "+e;
+			  			QT_1[i]=number_1+SymB[symbol_1]+ number_2+SymB[symbol_2]+number_3+SymB[symbol_3]+number_4+SymB[symbol_4]+number_5;
+			  			QT[i]=number_1+" "+SymB[symbol_1]+" "+ number_2 +" "+SymB[symbol_2] +" " +number_3+" "+SymB[symbol_3] +" "+number_4+" "+SymB[symbol_4]+" "+number_5;
 	  				}
 	  			}
-	  			else {continue;}
-	  			 List<String> zx= toInfixExpression(QT_1[i]);
-	  			 List<String> rpn=parseSuffixExpression(zx);
-	  			 AS[i]=QT[i]+" = "+reckon(rpn);
-	  			 if(reckon(rpn)<=0)
+	  		//判断运算符为四个之后，开始判断符号优先级，并在式子里添加括号。
+	  			
+	  			else {continue;}		//当symbol_number随机出不需要的数字时，结束本次循环，重新开始新的循环。主要防止出现空指针。
+	  			
+	  			
+	  			 List<String> rec= toInfixExpression(QT_1[i]);			//调用中序表达式。
+	  			 AS[i]=QT[i]+" = "+reckon(rec);
+	  			 
+	  			 
+	  			 if(reckon(rec)<0 || reckon(rec)>10000)  //当数字的结果大小为负数或者大于10000，结束本次循环，重新生成式子。
 	  			 {continue;}
 	  			 i++;
-
+	  			 
 	      	}
 	     
 	    }
 	
 	
-	  public  List<String> parseSuffixExpression(List<String> ls) {
+	  public  List<String> parseSuffixExpression(List<String> ls) {   //逆波兰表达式
 	        Stack<String> s1=new Stack<String>();
 	        List<String> LS = new ArrayList<String>();
 	        for (String str : ls) {
@@ -371,10 +398,11 @@ public class MathExam6360 {
 	            }
 
 	        } while (w < s.length());
-	        return ls;
+	        List<String> LS=parseSuffixExpression(ls);
+	        return LS;
 	    }
 	
-	 public  int reckon(List<String> ls) {
+	 public  int reckon(List<String> ls) {     //用于计算线性表里的式子。
 	        Stack<String> s=new Stack<String>();
 	        for (String str : ls) {
 	            if (str.matches("\\d+")) {
@@ -402,3 +430,5 @@ public class MathExam6360 {
 		new	MathExam6360(args);
 
 	}
+
+}
