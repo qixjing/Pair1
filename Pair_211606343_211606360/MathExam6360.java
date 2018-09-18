@@ -1,48 +1,48 @@
-
+//此次修改了判断混合运算至少包含两个运算符。添加了序号。获取当前时间。
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.Stack;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MathExam6360 {
 	
-	String QT[] = new String[1000];				//定义全局变量
-	String AS[] = new String[1000];				//定义全局变量
+	String Date[] = new String[100];
+	String QT[] = new String[1000];				//定义全局变量，存放问题
+	String QT_1[] = new String[1000];
+	String ORDER[] = new String[1000];			//定义存放序号的数组。
+	String AS[] = new String[1000];				//定义全局变量，存放问题和答案
 	String SymB[] = {"+","-","×","÷"};
 	String NL ="\r\n";							//定义全局变量
 	byte[] question;							//定义全局变量
 	byte[] newline = NL.getBytes();				//定义全局变量
 	byte[] answer;								//定义全局变量
+	byte[] order;
+	byte[] date;
 	
 	
-	
-	 private static int ADDITION=1;
-	 private static int SUBTRACTION=1;
-	 private static int MULTIPLICATION=2;
-	 private static int DIVISION=2;
-
 	 public static int Level(String operation){
 	     int result;
 	     switch (operation){
 	         case "+":
-	             result=ADDITION;
+	             result=1;
 	             break;
 	         case "-":
-	             result=SUBTRACTION;
+	             result=1;
 	             break;
 	         case "×":
-	             result=MULTIPLICATION;
+	             result=2;
 	             break;
 	         case "÷":
-	             result=DIVISION;
+	             result=2;
 	             break;
 	         default:
 //	             System.out.println("不存在该运算符");
@@ -69,6 +69,11 @@ public class MathExam6360 {
 	
 
 	private  void TxT(int count) {
+    
+		DateFormat dt = DateFormat.getDateTimeInstance(); 		//获取当前时间
+		Date[0] = dt.format(new Date());
+		
+		
 		File file = new File("out6343.txt");  	//创建文本
 		if(!file.exists())						//判断TXT是否存在
 		{
@@ -83,21 +88,28 @@ public class MathExam6360 {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			for(int i=0;i<count;i++) {
+				ORDER[i]="("+(i+1)+") ";
 				question = QT[i].getBytes();
+				order = ORDER[i].getBytes();
+				fos.write(order);
 				fos.write(question);
 				fos.write(newline);
 				
 			}
 			
 			
-			
 			for(int i=0;i<count;i++){
+				ORDER[i]="("+(i+1)+") ";
+				order = ORDER[i].getBytes();
 				answer = AS[i].getBytes();
 				fos.write(newline);
+				fos.write(order);
 				fos.write(answer);
 				
 			}
-			
+			date =Date[0].getBytes();
+			fos.write(newline);
+			fos.write(date);
 			fos.flush();
 			fos.close();
 			
@@ -158,14 +170,14 @@ public class MathExam6360 {
 			int symbol=(int)(Math.random()*2);
 		
 			if(symbol==0) {
-				QT[i-1]="("+ i +") " + a + " + " + b;
-				AS[i-1]="("+ i +") " + a + " + " + b +" = " +(a+b) ;
+				QT[i-1]=a + " + " + b;
+				AS[i-1]=a + " + " + b +" = " +(a+b) ;
 			}
 			else if(symbol==1) {
 				if(a<b)
 					{continue;}
-				QT[i-1]="("+ i +") " + a + " - " + b;	
-				AS[i-1]="("+ i +") " + a + " - " + b +" = " +(a-b) ;
+				QT[i-1]=a + " - " + b;	
+				AS[i-1]=a + " - " + b +" = " +(a-b) ;
 			}
 			i++;
 			}
@@ -179,32 +191,32 @@ public class MathExam6360 {
 			int symbol=(int)(Math.random()*4);
 		
 			if(symbol==0) {
-				QT[i-1]="("+ i +") " + a + " + " + b;
-				AS[i-1]="("+ i +") " + a + " + " + b +" = " + (a+b) ;
+				QT[i-1]=a + " + " + b;
+				AS[i-1]=a + " + " + b +" = " + (a+b) ;
 			}
 			else if(symbol==1) {
 				if(a<b)
 					{continue;}
-				QT[i-1]="("+ i +") " + a + " - " + b;	
-				AS[i-1]="("+ i +") " + a + " - " + b +" = " +(a-b) ;
+				QT[i-1]=a + " - " + b;	
+				AS[i-1]=a + " - " + b +" = " +(a-b) ;
 			}
 			else if(symbol==2) {
-				QT[i-1]="("+ i +") " + a%10 + " × " + b%10;
-				AS[i-1]="("+ i +") " + a%10 + " × " + b%10 +" = " +((a%10)*(b%10)) ;
+				QT[i-1]=a%10 + " × " + b%10;
+				AS[i-1]=a%10 + " × " + b%10 +" = " +((a%10)*(b%10)) ;
 			}
 			else if(symbol==3) {
 				if(b%10==0) 
 					{continue;}
 				
-				QT[i-1]="("+ i +") " + a%10 + " ÷ " + b%10;
+				QT[i-1]=a%10 + " ÷ " + b%10;
 				
 				if(((a%10)%(b%10))==0) {
 					
-					AS[i-1]="("+ i +") " + a%10 + " ÷ " + b%10 +" = " +((a%10)/(b%10)) ;
+					AS[i-1]=a%10 + " ÷ " + b%10 +" = " +((a%10)/(b%10)) ;
 				}
 			
 				else if(((a%10)%(b%10))!=0) {
-					AS[i-1]="("+ i +") " + a%10 + " ÷ " + b%10 +" = " +((a%10)/(b%10)) +" ··· " + ((a%10)%(b%10));
+					AS[i-1]=a%10 + " ÷ " + b%10 +" = " +((a%10)/(b%10)) +" ··· " + ((a%10)%(b%10));
 				}
 			
 			}
@@ -222,32 +234,40 @@ public class MathExam6360 {
 	  			int c=(int)(Math.random()*1000);
 	  			int symbol_1=(int)(Math.random()*4);
 	  			int symbol_2=(int)(Math.random()*4);
-	  			
+	  			int order_0=(int)(Math.random()*2);
 	  			
 	  			if(symbol_number == 2) {
-	
-		  			QT[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c;
-		  			
+	  				if(symbol_1==symbol_2)
+	  				{continue;}
+	  				
+		  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c;
+		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c;
 		  			}
 	  			
 	  			else if(symbol_number == 3) {
+	  				if(symbol_1==symbol_2)
+	  				{continue;}
 	  				int d=(int)(Math.random()*1000);
 	  				int symbol_3=(int)(Math.random()*4);
-		  			QT[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+d;
+		  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+d;
+		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3] +" "+d;
 		  			}
 	  			
 	  			
 	  			else if(symbol_number == 4) {
+	  				if(symbol_1==symbol_2)
+	  				{continue;}
 	  				int d=(int)(Math.random()*1000);
 	  				int e=(int)(Math.random()*1000);
 	  				int symbol_3=(int)(Math.random()*4);
 	  				int symbol_4=(int)(Math.random()*4);
-		  			QT[i]=a+SymB[symbol_1]+ b+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
+		  			QT_1[i]=a+SymB[symbol_1]+ b+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
+		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3] +" "+d+" "+SymB[symbol_4]+" "+e;
 		  			}
 	  			else {continue;}
-	  			 List<String> zx= toInfixExpression(QT[i]);
+	  			 List<String> zx= toInfixExpression(QT_1[i]);
 	  			 List<String> rpn=parseSuffixExpression(zx);
-	  			 AS[i]=QT[i]+"="+reckon(rpn);
+	  			 AS[i]=QT[i]+" = "+reckon(rpn);
 	  			 i++;
 
 	      	}
@@ -285,7 +305,7 @@ public class MathExam6360 {
 	        do {
 	            if ((c = s.charAt(w)) < 48 || (c = s.charAt(w)) > 57) {
 	                ls.add("" + c);
-	                if(w<sum) {w++;}
+	               w++;
 	                
 	            } else {
 	                str = "";
@@ -327,6 +347,7 @@ public class MathExam6360 {
 	
 	public static void main(String args[]) {
 		new	MathExam6360(args);
+
 	}
 
 }
