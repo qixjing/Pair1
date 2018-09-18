@@ -7,9 +7,10 @@ import java.util.Stack;
 public class MathExam {
 
 	public static void main(String[] args) throws Exception {
-
+		// 检测输入参数的各种bug
+		if (!check(args))return;
 		//判断年级
-		if (args[0].equals("-grade") && args[1].equals("3") || args[2].equals("-grade") && args[3].equals("3")) {
+		else if (args[0].equals("-grade") && args[1].equals("3") || args[2].equals("-grade") && args[3].equals("3")) {
 			StringBuffer strbuf2 = init3(args);
 		} else {
 			//将4个参数改成2个参数传给运算1、2年级的程序
@@ -241,6 +242,57 @@ public class MathExam {
 		strbuf = strbuf.append("\r\n" + strbuf1);
 	}
 
+	public static boolean check(String[] args) {
+		// 判断参数的长度是否为4
+		if (args.length > 4 || args.length < 4) {
+			System.out.println("参数数量有误！！");
+			return false;
+		}
+		// 判断是否用-n 和-grade的标识符
+		if (!(("-n").equals(args[0]) && "-grade".equals(args[2])
+				|| ("-n").equals(args[2]) && "-grade".equals(args[0]))) {
+			System.out.println("标识符错误！！");
+			return false;
+		}
+		// 排除-n参数的000001这种类似的情况
+		char[] allChar = args[1].toCharArray();
+		char[] allChar1 = args[3].toCharArray();
+		int k = 0;
+		while (allChar[k++] == '0');
+		args[1] = new String(allChar, k - 1, allChar.length - k + 1);
+		k = 0;
+		while (allChar1[k++] == '0');
+		args[3] = new String(allChar1, k - 1, allChar1.length - k + 1);
+		// 检查题目都是数字
+		boolean matches;
+		if (args[0].equals("-n")) {
+			matches = args[1].matches("[0-9]*");
+		} else {
+			matches = args[3].matches("[0-9]*");
+		}
+
+		boolean matches1;
+		// 检测年级参数是否是1-3
+		if (args[0].equals("-garde")) {
+			matches1 = args[1].matches("[1-3]?");
+		} else {
+			matches1 = args[3].matches("[1-3]?");
+		}
+		if (!matches1) {
+			System.out.println("年级参数错误，只能在[1~3]以内");
+			return false;
+		}
+			
+		//判断题目的数量是否为正整数
+		if (matches && (args[1].length() > 4 || args[3].length() > 4)) {
+			System.out.println("题目数量太多了，重新输入！！");
+			return false;
+		} else if (!matches) {
+			System.out.println("请输入正整数");
+			return false;
+		}
+		return true;
+	}
 	/*
 	 * 以下是调度场算法和逆波兰表达式的实现
 	 */
