@@ -1,5 +1,3 @@
-package com.java350.lesson01;
-
 
 import java.util.List;
 import java.util.Random;
