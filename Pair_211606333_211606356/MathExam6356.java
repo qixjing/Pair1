@@ -28,7 +28,7 @@ public class MathExam6356 {
 	private static void init(String[] input) throws FileNotFoundException {
 		if (input.length == 0) {
 			// 默认参数
-			n = 10;
+			n = 100;
 			grade = 3;
 		} else if (input.length == 4) {
 			if (input[0].equals("-n") && input[2].equals("-grade")) {
@@ -54,11 +54,11 @@ public class MathExam6356 {
 		}
 		if (grade == 1) {
 			gradeOne();
-		} else if(grade==2) {
+		} else if (grade == 2) {
 			gradeTwo();
-		}else if (grade==3) {
+		} else if (grade == 3) {
 			gradeThree();
-		}else {
+		} else {
 			System.out.println("目前只支持1-3年级，请重新输入");
 		}
 		File file = new File("out.txt");
@@ -70,51 +70,79 @@ public class MathExam6356 {
 	private static void gradeThree() {
 
 		str = new String[n];
-		AS=new String[n];
-		for(int i=0;i<n;i++) {
-		int n1 =num1.nextInt(2)+3;// 随机符号的个数
-		a = new int[n1];// 运算符个数
-		b=new int [n1+1];// 数字的个数
-		String fuhao[]= {"+","-","×","÷"};
-		String fuhao1[]=new String[4];	//判断符号
-		for(int j=0; j<n1; j++){
-			a[j]=num1.nextInt(4);
-			fuhao1[j]=fuhao[a[j]];// 随机生成n1个运算符
+		AS = new String[n];
+		for (int i = 0; i < n; i++) {
+			int n1 = num1.nextInt(2) + 3;// 随机符号的个数
+			a = new int[n1];// 运算符个数
+			b = new int[n1 + 1];// 数字的个数
+			String fuhao[] = { "+", "-", "×", "÷" };
+			String fuhao1[] = new String[4]; // 判断符号
+			for (int j = 0; j < n1; j++) {
+				a[j] = num1.nextInt(4);
+				fuhao1[j] = fuhao[a[j]];// 随机生成n1个运算符
 			}
-		
-		for(int k =0;k<n1+1;k++) {
-			b[k]=num2.nextInt(100);// 根据运算符个数随机生成n+1个数字
-		}
-		
-		String ss=Integer.toString(b[0]);//用来保存一个算式，让它先为一个数字
-		
-		for(int x=0;x<n1;x++) {
-			//String ss=Integer.toString(b[0]);//用来保存一个算式，让它先为一个数字
-			if(fuhao1[x].equals("+")||fuhao1[x].equals("-")) {
-				int n2=(int)(0+Math.random()*(2-1+1));//随机生成0或1，用来随机生成加减法的括号
-				//if(n2==0) {
-					//ss="("+ss+fuhao1[x]+b[x+1]+")";
-				//}
-				//if(n2==1) {
-					ss=ss+fuhao1[x]+b[x+1];	
-				//}	
+
+			for (int k = 0; k < n1 + 1; k++) {
+				b[k] = num2.nextInt(100) + 1;// 根据运算符个数随机生成n+1个数字
 			}
-			else {
-				ss=ss+fuhao1[x]+b[x+1];
-			}	
-			
+			String[] str2 = new String[n1 + 1];
+			int[] flag = new int[n1 + 1];// 标记数组0(,1无符号,2)
+			for (int j = 0; j < n1 + 1; j++) {
+				str2[j] = Integer.toString(b[j]);
+				flag[j] = 1;
+			}
+			int front = -2;
+			String ss = null;// 用来保存一个算式，让它先为一个数字
+			for (int x = 0; x < n1; x++) {
+				if (fuhao1[x].equals("+") || fuhao1[x].equals("-")) {
+					int n2 = (int) (0 + Math.random() * (2 - 1 + 1));// 随机生成0或1，用来随机生成加减法的括号
+					boolean tag = false;
+					if (n2 == 0) {
+						if (front == x - 1) {
+							if ((flag[x - 1] == 1 || flag[x - 1] == 0) && flag[x - 1] != 2 && !tag) {
+								str2[x - 1] = "(" + str2[x - 1];
+								flag[x - 1] = 0;
+							} else {
+								tag = true;
+							}
+							if ((flag[x + 1] == 1 || flag[x + 1] == 2) && flag[x + 1] != 0 && !tag) {
+								str2[x + 1] = str2[x + 1] + ")";
+								flag[x + 1] = 2;
+							} else {
+								tag = true;
+							}
+						} else {
+							if ((flag[x] == 1 || flag[x] == 0) && flag[x] != 2 && !tag) {
+								str2[x] = "(" + str2[x];
+								flag[x] = 0;
+							} else {
+								tag = true;
+							}
+							if ((flag[x + 1] == 1 || flag[x + 1] == 2) && flag[x + 1] != 0 && !tag) {
+								str2[x + 1] = str2[x + 1] + ")";
+								flag[x + 1] = 2;
+							} else {
+								tag = true;
+							}
+							front = x;
+						}
+
+					}
+				}
+			}
+			ss = str2[0];
+			for (int j = 0; j < n1; j++) {
+				ss = ss + fuhao1[j] + str2[j + 1];
+			}
+			str[i] = ss;
 		}
-		str[i]=ss;
-		
-	}	List<String> zx=null;
+		List<String> infixorder = null;
 		for (int i = 0; i < str.length; i++) {
-		zx= toInfixExpression(str[i]);
-		 List<String> rpn=parseSuffixExpression(zx);
-				AS[i]=str[i]+"="+reckon(rpn); 
-	}
-		
-			
-		
+			infixorder = toInfixExpression(str[i]);// 中序表达式
+			List<String> suffix = parseSuffixExpression(infixorder);// 后续
+			AS[i] = str[i] + "=" + answer(suffix);
+		}
+
 	}
 
 	private static void gradeTwo() {
@@ -144,17 +172,16 @@ public class MathExam6356 {
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "-" + b[i] + " =");
 				}
-			} else if(grade==2) {
+			} else if (grade == 2) {
 				if (c[i] == 0) {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "*" + b[i] + " =");
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "/" + b[i] + " =");
 				}
-			}else {
-				
-				System.out.println("(" + (i + 1) + ") " +str[i]);
-			
-				
+			} else {
+
+				System.out.println("(" + (i + 1) + ") " + str[i]);
+
 			}
 		}
 		System.out.println("--------------标准答案----------------");
@@ -165,7 +192,7 @@ public class MathExam6356 {
 				} else {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "-" + b[i] + " =" + " " + (a[i] - b[i]));
 				}
-			} else if(grade==2){
+			} else if (grade == 2) {
 				if (c[i] == 0) {
 					System.out.println("(" + (i + 1) + ") " + a[i] + "*" + b[i] + " =" + " " + (a[i] * b[i]));
 				} else if (a[i] % b[i] == 0) {
@@ -175,8 +202,8 @@ public class MathExam6356 {
 							+ (a[i] % b[i]));
 
 				}
-			}else {
-				System.out.println("(" + (i + 1) + ") " +AS[i]);
+			} else {
+				System.out.println("(" + (i + 1) + ") " + AS[i]);
 			}
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
@@ -212,104 +239,111 @@ public class MathExam6356 {
 
 		}
 	}
-	  public static  List<String> parseSuffixExpression(List<String> ls) {
-	        Stack<String> s1=new Stack<String>();
-	        List<String> LS = new ArrayList<String>();
-	        for (String ssr : ls) {
-	            if (ssr.matches("\\d+")) {
-	                LS.add(ssr);
-	            }
-	            else {Operation a=new Operation();
-	                while (s1.size() != 0 && a.getValue(s1.peek()) >= a.getValue(ssr)) {
-	                    LS.add(s1.pop());
-	                }
-	                s1.push(ssr);
-	            }
-	        }
-	        while (s1.size() != 0) {
-	            LS.add(s1.pop());
-	        }
-	        return LS;
-	    }
-	  
-	
-	 public static List<String> toInfixExpression(String s) {
-	        List<String> ls = new ArrayList<String>();//存储中序表达式
-	        int w = 0;
-	        String str;
-	        char c;
-	        do {
-	            if ((c = s.charAt(w)) < 48 || (c = s.charAt(w)) > 57) {
-	                ls.add("" + c);
-	                w++;
-	            } else {
-	                str = "";
-	                while (w < s.length() && (c = s.charAt(w)) >= 48
-	                        && (c = s.charAt(w)) <= 57) {
-	                    str += c;
-	                    w++;
-	                }
-	                ls.add(str);
-	            }
 
-	        } while (w < s.length());
-	        return ls;
-	    }
-	
-	 public static  int reckon(List<String> ls) {
-	        Stack<String> s=new Stack<String>();
-	        for (String str : ls) {
-	            if (str.matches("\\d+")) {
-	                s.push(str);
-	            } else {
-	                int b = Integer.parseInt(s.pop());
-	                int a = Integer.parseInt(s.pop());
-	                int result=0;
-	                if (str.equals("+")) {
-	                    result = a + b;
-	                } else if (str.equals("-")) {
-	                    result = a - b;
-	                } else if (str.equals("*")) {
-	                    result = a * b;
-	                } else if (str.equals("/")) {
-	                    result = a / b;
-	                }
-	                s.push("" + result);
-	            }
-	        }
-	        return Integer.parseInt(s.pop());
-	    }
-	 public static class Operation { 
-		 private int ADDITION=1;
-		    private int SUBTRACTION=1;
-		    private int MULTIPLICATION=2;
-		    private int DIVISION=2;
-		 Operation() {
-			
-		 }
-		    
-
-		    public int getValue(String operation){
-		        int result;
-		        switch (operation){
-		            case "+":
-		                result=ADDITION;
-		                break;
-		            case "-":
-		                result=SUBTRACTION;
-		                break;
-		            case "×":
-		                result=MULTIPLICATION;
-		                break;
-		            case "÷":
-		                result=DIVISION;
-		                break;
-		            default:
-//		                System.out.println("不存在该运算符");
-		                result=0;
-		        }
-		        return result;
-		    }
+	public static List<String> parseSuffixExpression(List<String> ls) {
+		Stack<String> s1 = new Stack<String>();
+		List<String> LS = new ArrayList<String>();
+		for (String ssr : ls) {
+			if (ssr.matches("\\d+")) {
+				LS.add(ssr);
+			} else if (ssr.equals("(")) {
+				s1.push(ssr);
+			} else if (ssr.equals(")")) {
+				while (!s1.peek().equals("(")) {
+					LS.add(s1.pop());
+				}
+				s1.pop();
+			} else {
+				Operation operation = new Operation();
+				while (s1.size() != 0 && operation.getValue(s1.peek()) >= operation.getValue(ssr)) {
+					LS.add(s1.pop());
+				}
+				s1.push(ssr);
+			}
 		}
+		while (s1.size() != 0) {
+			LS.add(s1.pop());
+		}
+		return LS;
+	}
+
+	public static List<String> toInfixExpression(String s) {
+		List<String> infixorder = new ArrayList<String>();// 存储中序表达式
+		int w = 0;
+		String ssr;
+		char c;
+		do {
+			if ((c = s.charAt(w)) < 48 || (c = s.charAt(w)) > 57) {
+				infixorder.add("" + c);
+				w++;
+			} else {
+				ssr = "";
+				while (w < s.length() && (c = s.charAt(w)) >= 48 && (c = s.charAt(w)) <= 57) {
+					ssr += c;
+					w++;
+				}
+				infixorder.add(ssr);
+			}
+
+		} while (w < s.length());
+		return infixorder;
+	}
+
+	public static int answer(List<String> last) {
+		Stack<String> s = new Stack<String>();
+		for (String ssr : last) {
+			if (ssr.matches("\\d+")) {
+				s.push(ssr);
+			} else {
+				int b = Integer.parseInt(s.pop());
+				int a = Integer.parseInt(s.pop());
+				int result = 0;
+				if (ssr.equals("+")) {
+					result = a + b;
+				} else if (ssr.equals("-")) {
+					result = a - b;
+				} else if (ssr.equals("×")) {
+					result = a * b;
+				} else if (ssr.equals("÷")) {
+					result = a / b;
+				}
+				s.push("" + result);
+			}
+		}
+		return Integer.parseInt(s.pop());
+	}
+
+	public static class Operation {// 优先级
+		private int ADDITION = 1;
+		private int SUBTRACTION = 1;
+		private int MULTIPLICATION = 2;
+		private int DIVISION = 2;
+
+		Operation() {
+
+		}
+
+		public int getValue(String operation) {
+			int result;
+			switch (operation) {
+			case "+":
+				result = ADDITION;
+				break;
+			case "-":
+				result = SUBTRACTION;
+				break;
+			case "×":
+				result = MULTIPLICATION;
+				break;
+			case "÷":
+				result = DIVISION;
+				break;
+			default:
+				// System.out.println("不存在该运算符");
+				result = 0;
+			}
+			return result;
+		}
+	}
 
 }
