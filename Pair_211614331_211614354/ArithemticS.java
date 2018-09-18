@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class ArithemticS extends Operation{
 	 LinkedList<String> shortStack;// 临时存储符号
-	 LinkedList<String> PostfixStack;// 后缀表达式(集合)
+	 LinkedList<String> postFixStack;// 后缀表达式(集合)
 	 String problem;// 题目
 	 LinkedList<String> runAnswer;//计算题目的栈
 	 String reversedNumber;//倒序元素
@@ -18,7 +18,7 @@ public class ArithemticS extends Operation{
 	public  boolean startProblem(String problem) {
 		 //problem="( 15 + 25 ) - ( 3 + 8 ) * ( 5 + 4 )";
 		 shortStack=new LinkedList<String>();// 临时栈
-		 PostfixStack=new LinkedList<String>();// 后缀表达式栈
+		 postFixStack=new LinkedList<String>();// 后缀表达式栈
 		String partNumber;// 其中一个元素
 	
 		
@@ -28,7 +28,7 @@ public class ArithemticS extends Operation{
 			partNumber=problemString[i];
 			if(partNumber.matches("\\d+")) {	// 数字直接加入后缀表达式的栈
 			
-				PostfixStack.push(partNumber); // 直接压栈，进入后缀栈
+				postFixStack.push(partNumber); // 直接压栈，进入后缀栈
 				//System.out.println("数字入栈--后缀栈当前为："+PostfixStack);
 			}
 			else {
@@ -43,7 +43,7 @@ public class ArithemticS extends Operation{
 						
 						 if(shortStack.peek().matches("[\\+\\-\\*\\/]")) {	// 栈顶为同级或加减
 							 do {
-								 PostfixStack.push(shortStack.pop());
+								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
 							 }while(shortStack.peek().matches("[\\+\\-\\*\\/]") );
@@ -64,7 +64,7 @@ public class ArithemticS extends Operation{
 						
 						 if(shortStack.peek().matches("[\\+\\-\\*\\/]")) {	// 栈顶为同级或加减
 							 do {
-								 PostfixStack.push(shortStack.pop());
+								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
 								 
@@ -86,7 +86,7 @@ public class ArithemticS extends Operation{
 						
 						 if(shortStack.peek().matches("[\\*\\/]") ) {	// 栈顶为同级或加减
 							 do {
-								 PostfixStack.push(shortStack.pop());
+								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
 							 }while(shortStack.peek().matches("[\\*\\/]"));
@@ -106,7 +106,7 @@ public class ArithemticS extends Operation{
 						
 						 if(shortStack.peek().matches("[\\*\\/]") ) {	// 栈顶为同级或加减
 							 do {
-								 PostfixStack.push(shortStack.pop());
+								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，栈变空，也结束循环
 							 }while(shortStack.peek().matches("[\\*\\/]") );
@@ -128,7 +128,7 @@ public class ArithemticS extends Operation{
 						
 						partNumber=shortStack.pop(); // 不管右括号，直接从临时栈中弹栈顶出来
 						//System.out.println("弹了一个元素的临时账："+shortStack);
-						PostfixStack.push(partNumber); // 把栈顶元素，填入后缀栈中
+						postFixStack.push(partNumber); // 把栈顶元素，填入后缀栈中
 					}while(!shortStack.peekFirst().equals("("));
 					//System.out.println("弹完元素的临时账："+shortStack);
 					shortStack.pop();	
@@ -142,7 +142,7 @@ public class ArithemticS extends Operation{
 		//System.out.println(shortStack);
 		if(!shortStack.isEmpty()) {	//把临时栈里的元素全部加入后缀栈中
 			do {
-				PostfixStack.push(shortStack.pop());
+				postFixStack.push(shortStack.pop());
 			}while(!shortStack.isEmpty()); // 直到栈空为止
 						
 		}
@@ -156,7 +156,7 @@ public class ArithemticS extends Operation{
 	public  boolean solveProblem(){
 		
 		@SuppressWarnings("rawtypes")
-		Iterator reversed = PostfixStack.descendingIterator();// 迭代器，倒序输出
+		Iterator reversed = postFixStack.descendingIterator();// 迭代器，倒序输出
 	      // print list with descending order
 		
 		 runAnswer=new LinkedList<String>( );
