@@ -22,6 +22,7 @@ public class MathExamLv2 {
     private static LinkedList<String> output=new LinkedList<>();
     //用于展示后缀表达式
     private static StringBuilder sb=new StringBuilder();
+    
     //中缀表达式转为后缀表达式
     private static void transferToPostfix(LinkedList<String> list){
         Iterator<String> it=list.iterator();
@@ -77,7 +78,6 @@ public class MathExamLv2 {
         calculate();
         //Collections.reverse(output);
     }
-
     //根据后缀表达式计算结果
     private static void calculate(){
         LinkedList<String> mList=new LinkedList<>();
@@ -116,7 +116,6 @@ public class MathExamLv2 {
         }
         sb.setLength(0);
     }
-
     //判断是否操作符
     private static boolean isOperator(String oper){
         if (oper.equals("+")||oper.equals("-")||oper.equals("/")||oper.equals("*")
@@ -137,7 +136,7 @@ public class MathExamLv2 {
             default :return 0;
         }
     }
-
+    //进行计算
     private static int cal(int num1,int num2,String operator){
         switch (operator){
             case "+":return num1+num2;
@@ -147,7 +146,7 @@ public class MathExamLv2 {
             default :return 0;
         }
     }
-
+    //一年级的题目
 	private static void gradeOne(int n) throws IOException, FileNotFoundException {
 		int[] sum = new int[n + 1];// 创建sum数组用来保存答案
 		char[] signSet = { '+', '-' };// 创建sianSet数组用来保存字符组
@@ -192,7 +191,7 @@ public class MathExamLv2 {
 			}
 		} // 这个for循环是用来确立要写入到out.txt中的str的值，也就是要出的题目的答案
 	}
-
+	//二年级的题目
 	private static void gradeTwo(int n) throws IOException, FileNotFoundException {
 		String[] sum = new String[n + 1];// 创建sum数组用来保存答案
 		char[] signSet = { '*', '/' };// 创建sianSet数组用来保存字符组
@@ -242,13 +241,13 @@ public class MathExamLv2 {
 			}
 		} // 这个for循环是用来确立要写入到out.txt中的str的值，也就是要出的题目的答案
 	}
-
+	//三年级的题目
 	private static void gradeThree(int n) throws IOException, FileNotFoundException {
 		String[] sum = new String[n];
 		Random random = new Random();
 		char[] signSet = { '*', '/' ,'+','-'};
 		for(int i=0;i<n;i++) {
-			int sumOfSign=random.nextInt(3)+1;
+			int sumOfSign=random.nextInt(2)+2;
 			int flag=0;
 			if(sumOfSign>1) {
 				flag=random.nextInt(2);//令括号在其他运算符大于一个的时候有二分之一的概率出现
@@ -314,14 +313,14 @@ public class MathExamLv2 {
 			}
 		} // 这个for循环是用来确立要写入到out.txt中的str的值，也就是要出的题目的答案
 	}
-
+	//输入方法
 	private static BufferedReader in() throws FileNotFoundException {
 		File file = new File("out.txt");
 		InputStreamReader in = new InputStreamReader(new FileInputStream(file));// 建立一个输入流的对象
 		BufferedReader br = new BufferedReader(in);// 建立一个缓冲对象，把文件内容转换成计算机能识别的对象
 		return br;
 	}
-
+	//输出方法
 	private static void out(String str) throws IOException {
 		File file = new File("out.txt");// 定义一个文件对象并令其指向一个文件位置
 		file.createNewFile();// 在指定位置创建一个文件
@@ -330,7 +329,7 @@ public class MathExamLv2 {
 		br.flush();
 		br.close();
 	}
-
+	//除错处理
 	private static void wrongJudgement(String[] args, int n, int grade) throws IOException, FileNotFoundException {
 		if (args.length < 4) {
 			System.out.println("请按照 -n n -grade grade 或者 -grade grade -n n的方式输入4个参数！");
