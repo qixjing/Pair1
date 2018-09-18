@@ -147,7 +147,9 @@ public class MathExam {
 	}
 
 	public static void mathTwo(int n) {
+		// 带题号的题目
 		String prob;
+		// 不带题号的题目
 		String prob1;
 		String ans;
 		ArrayList<String> probs = new ArrayList<String>();
@@ -232,8 +234,105 @@ public class MathExam {
 	}
 
 	public static void mathThr(int n) {
-		System.out.println("三年级");
-		System.out.println(n + "题");
+		String sym;
+
+		// 带题号的题目
+		String prob;
+		// 不带题号的题目
+		String prob1;
+		String ans;
+		// 用来存放单题的题目,拆分数字,符号用
+		ArrayList<String> pro = new ArrayList<String>();
+		// 用来存放全部题目
+		ArrayList<String> probs = new ArrayList<String>();
+		ArrayList<String> anss = new ArrayList<String>();
+		for (int j = 0; j < n; j++) {
+			// 用来随机符号的个数2-4个
+			int p = (int) (2 + Math.random() * (4 - 2 + 1));
+			prob1 = "";
+			// 数值位数加符号位数应该是(2*符号位数+1)
+			for (int i = 0; i < (2 * p) + 1; i++) {
+				// 用来判断数值位应该出现的位置
+				if (i % 2 == 0) {
+					int number = (int) (0 + Math.random() * (99 - 0 + 1));
+					pro.add(String.valueOf(number));
+				} // 此时应出符号
+				else {
+					int x = (int) (1 + Math.random() * (4 - 1 + 1));
+					if (x == 1) {
+						sym = "+";
+					} else if (x == 2) {
+						sym = "-";
+					} else if (x == 3) {
+						sym = "*";
+					} else {
+						sym = "/";
+					}
+					pro.add(sym);
+				}
+			}
+			// 将被拆分的题目转成字符串
+			for (String str : pro) {
+				prob1 += str;
+			}
+			pro.clear();
+			probs.add(prob1);
+		}
+
+		File file = new File("out.txt");
+		if (!file.exists()) {
+			File parent = file.getParentFile();
+			if (parent != null && !parent.exists()) {
+				parent.mkdirs();
+			}
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("文件创建失败,请重试");
+			}
+		}
+		try {
+			OutputStream out = new FileOutputStream(file);
+			byte[] data;
+			for (String str : probs) {
+				str += "\r\n";
+				data = str.getBytes();
+				try {
+					out.write(data);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("写入错误!");
+				}
+			}
+			String fg = "" + "\r\n";
+			data = fg.getBytes();
+			try {
+				out.write(data);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("写入错误!");
+			}
+			for (String str : anss) {
+				str += "\r\n";
+				data = str.getBytes();
+				try {
+					out.write(data);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("写入错误!");
+				}
+			}
+			try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("io错误");
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("找不到文件,请重试");
+		}
 	}
 
 	public static void main(String[] args) {
