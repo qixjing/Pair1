@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,13 +16,13 @@ public class Algorithm {
     private int grade;
     private int number;
     private int Symbol;
-    private int[] flag;
     private int fg=0;
-    private String str="";
+    private int[] flag;
+    private String word="";
     private BufferedWriter bw;
-    private LinearTable L=new LinearTable();
-    private SopStacks Sop=new SopStacks();
-    private SopStacks scale=new SopStacks();
+    private List<String> L=new ArrayList<String>();
+    private Stack<String> Sop=new Stack<String>();
+    private Stack<String> scale=new Stack<String>();
     private List<String> list=new ArrayList<String>();
     private List<String> problem=new ArrayList<String>();
     private List<String> answer=new ArrayList<String>();
@@ -94,67 +95,36 @@ public class Algorithm {
     private void Input()
     {
     	getProblem();
-		for(int j=0;j<=L.size();j++)
-		{
-			str=str+L.get(j);
-			list.add(L.get(j));
-		}
-		problem.add(str);
-		L.remove();
+    	System.out.println(word);
+    	for(int i=0;i<word.length();i++) {
+    		list.add(word.charAt(i)+"");
+    	}
+		problem.add(word);
 		Transformation();
 		answer.add(count());
     }
     //三年级的计算算法
     private void getProblem()
     {
-    	Symbol=random.nextInt(3)+2;
-    	flag=new int[Symbol];
-		for(int i=0;i<=Symbol;i++) {
-			if(fg>1)
-			{
-			if(L.get(fg-1).equals(")")) 
-			{
-				flag[i]=random.nextInt(4)+1;
-			}
-			}
-			else {
-				flag[i]=random.nextInt(5);
-			}
-			if(flag[i]==0)
-			{
-				L.append("(");
-				fg++;
-			}
-			L.append(random.nextInt(100)+1+"");
-			fg++;
-			if(flag[i]==0) 
-			{
-				flag[i]=random.nextInt(4)+1;
-				fg++;
-				L.append(fg+1,")");
-			}
-			if(flag[i]==1) 
-			{
-				 L.append("+");
-				 fg++;
- 			}
- 			else if(flag[i]==2) 
- 			{
- 				L.append("-");
- 				fg++;
- 			}
- 			else if(flag[i]==3)
- 			{
- 				L.append("*");
- 				fg++;
- 			}
- 			else if(flag[i]==4)
- 			{
- 				L.append("÷");
- 				fg++;
- 			}
+//    	flag=new int[Symbol];
+//    	word=""+random.nextInt(100)+1;
+//    	flag[0]=random.nextInt(5);
+//    	Symbol=random.nextInt(2)+2;
+//		for(int i=0;i<=Symbol-1;i++) {
+//			int Symbol1 = random.nextInt(2)+2;
+//			if(flag[0]%2==0) {
+//				word=word+"("+symbolStr[Symbol1-1]+random.nextInt(100)+1+")";
+//				i++;
+//				flag[0]=1;
+//				continue;
+//				
+//
+//			}
+//			
+//			word = word+symbolStr[Symbol1-1]+random.nextInt(100)+1;
+			word=8+"*"+"("+6+"÷"+3+")"+"";
 		}  
-    }
+    
     //生成一道题目（三年级）
     public static boolean isDigit(String args) 
     {
@@ -165,10 +135,10 @@ public class Algorithm {
   //判断字符串是否为一个数字
     private void Transformation()
     {
-    	for(String s:list) {
+		for(String s:list) {
     		if(isDigit(s)) 
     		{
-    			L.append(s);
+    			L.add(s);
     		}
     		//根据逆波兰算法：操作数进入线性表
     		else if(s.equals("(")||s.equals(")"))
@@ -181,7 +151,7 @@ public class Algorithm {
     			{
     				while(!Sop.isEmpty()&&!Sop.pop().equals("(")) 
     				{
-    					L.append(Sop.pop());	
+    					L.add(Sop.pop());	
     				}
     				if(!Sop.isEmpty())  {
     					Sop.pop();
@@ -191,9 +161,12 @@ public class Algorithm {
     		else
     		{	Operator e=new Operator(s);
     			Operator e1=new Operator(Sop.peek());
-    			while(!Sop.isEmpty()&&Sop.peek().equals("+")||Sop.peek().equals("-")||Sop.peek().equals("*")||Sop.peek().equals("÷")&&e.compareTo(e1)<=0) 
+    			while(!Sop.isEmpty()&&Sop.peek().equals("+")
+    					||Sop.peek().equals("-")
+    					||Sop.peek().equals("*")
+    					||Sop.peek().equals("÷")&&e.compareTo(e1)<=0) 
     			{
-    				L.append(Sop.pop());
+    				L.add(Sop.pop());
     			}
     			Sop.push(s);
     		}
@@ -201,13 +174,14 @@ public class Algorithm {
     
     while(!Sop.isEmpty()) 
     {
-    	L.append(Sop.pop());
+    	L.add(Sop.pop());
     }
  }
     //把中缀变为后缀
     private String count()
     {
     	for(int i=0;i<=L.size();i++) {
+    		System.out.println(i+" "+L);
     		if(isDigit(L.get(i))) {
     			scale.push(L.get(i));
     		}
@@ -242,6 +216,7 @@ public class Algorithm {
     		}
     		
     	}
+    	System.out.println(scale.peek());
     	return scale.pop();
     }
     //计算后缀表达式
