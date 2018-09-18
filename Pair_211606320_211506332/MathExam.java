@@ -31,7 +31,7 @@ public class MathExam {
 	
 	static Random random=new Random();
 	
-	static List<String> RPN;
+	static List<String> RPN = new ArrayList<String>();
 //	定义一个stack纪录运算符
 	static Stack<String> ops = new Stack<String>();
 //	首先完成一下初始化工作：
