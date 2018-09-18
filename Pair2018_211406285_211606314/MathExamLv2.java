@@ -263,6 +263,29 @@ public class MathExamLv2 {
 					str=str+" ";
 				}
 			}
+			int jiahao=0,jianhao=0,chenghao=0,chuhao=0;
+			for(int w=0;w<str.length();w++) {
+				char c = str.charAt(w);
+				switch(c) {
+				case '+':;jiahao++;break;
+				case '-':;jianhao++;break;
+				case '*':;chenghao++;break;
+				case '/':;chuhao++;break;
+				default:;
+				}
+			}
+			if(jiahao>1 || jianhao>1 || chenghao>1 || chuhao>1) {
+				i=i-1;
+				jiahao=0;
+				jianhao=0;
+				chenghao=0;
+				chuhao=0;
+				continue;
+			}
+			jiahao=0;
+			jianhao=0;
+			chenghao=0;
+			chuhao=0;
 			if((str.contains("-") || str.contains("+")) &&(str.contains("*") || str.contains("/"))) {
 				if(flag==1) {
 					int t=str.indexOf("-");
@@ -272,7 +295,7 @@ public class MathExamLv2 {
 					int right=str.indexOf(" ", t+2);
 					int left=str.indexOf(" ",t-5);
 					if(str.charAt(left)==' ' && !Character.isDigit(str.charAt(left+1)) ) {
-						left=left+1;
+						left=left+2;
 					}
 					StringBuffer sb = new StringBuffer(str);
 					sb.insert(right, " )");
@@ -283,13 +306,9 @@ public class MathExamLv2 {
 			LinkedList<String> list=new LinkedList<>();
 			String[] arr = str.split(" ");
 	        for(int q=1;q<arr.length;q++) {
-	        	if(q==1) {
-	        		list.add(arr[q]);
-	        		continue;
-	        	}
 	        	list.add(arr[q]);
 	        }
-			transferToPostfix(list);
+			transferToPostfix(list);	
 			if(answer=="wrong") {
 				i=i-1;
 				continue;
