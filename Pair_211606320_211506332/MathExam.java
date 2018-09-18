@@ -53,10 +53,6 @@ public class MathExam {
 	}
 	 
 	public static double eval(String op, String val1, String val2) {
-//	    if (op.equals("+")) return Integer.parseInt(val1) + Integer.parseInt(val2);
-//	    if (op.equals("-")) return Integer.parseInt(val1) - Integer.parseInt(val2);
-//	    if (op.equals("/")) return Integer.parseInt(val1) / Integer.parseInt(val2);
-//	    if (op.equals("*")) return Integer.parseInt(val1) * Integer.parseInt(val2);
 	    if (op.equals("+")) return Double.parseDouble(val1) + Double.parseDouble(val2);
 	    if (op.equals("-")) return Double.parseDouble(val1) - Double.parseDouble(val2);
 	    if (op.equals("/")) return Double.parseDouble(val1) / Double.parseDouble(val2);
