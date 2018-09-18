@@ -48,14 +48,14 @@ public class Algorithm {
     	}
     	if(grade==1) {
     		CalculationOne();
-    	}
+    	}//根据参数判断年级
     }
     private void CalculationOne() {
 		
-	}
+	}//一年级的计算算法
     private void CalculationTwo() {
 		
-	}
+	}//二年级的计算算法
     private void CalculationThree()
     {
     	File file=new File("out.txt");
