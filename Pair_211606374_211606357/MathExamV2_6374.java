@@ -4,6 +4,8 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.concurrent.SynchronousQueue;
@@ -342,5 +344,8 @@ public class MathExamV2_6374 {
 	u.write(xr);
 	System.out.println("题目与答案已经写入out.txt");
 	}	
-}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+		String time = sdf.format(new Date());
+		System.out.println("陈远军"+time);
+	}
 }
