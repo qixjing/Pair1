@@ -1,4 +1,4 @@
-//此次修改了判断混合运算至少包含两个运算符。添加了序号。获取当前时间。
+//给式子添加了括号判断，并在逆波兰中加入判断左右括号的判断，并将其压入栈中或者提取出栈，添加进线性表内。
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
 
 public class MathExam6360 {
 	
-	String Date[] = new String[100];
-	String QT[] = new String[1000];				//定义全局变量，存放问题
-	String QT_1[] = new String[1000];
-	String ORDER[] = new String[1000];			//定义存放序号的数组。
-	String AS[] = new String[1000];				//定义全局变量，存放问题和答案
+	String Date[] = new String[1000];
+	String QT[] = new String[10000];				//定义全局变量，存放问题
+	String QT_1[] = new String[10000];
+	String ORDER[] = new String[10000];			//定义存放序号的数组。
+	String AS[] = new String[10000];				//定义全局变量，存放问题和答案
 	String SymB[] = {"+","-","×","÷"};
 	String NL ="\r\n";							//定义全局变量
 	byte[] question;							//定义全局变量
@@ -228,20 +228,29 @@ public class MathExam6360 {
 	     int i=0;
 	    while(i<count){
 	    	  	
-	    	  	int symbol_number=(int)(Math.random()*5+2);
+	    	  	int symbol_number=(int)(Math.random()*5+2);   //随机生成数字，用于判断符号个数
 	    	  	int a=(int)(Math.random()*1000);
 	  			int b=(int)(Math.random()*1000);
 	  			int c=(int)(Math.random()*1000);
 	  			int symbol_1=(int)(Math.random()*4);
 	  			int symbol_2=(int)(Math.random()*4);
-	  			int order_0=(int)(Math.random()*2);
 	  			
 	  			if(symbol_number == 2) {
-	  				if(symbol_1==symbol_2)
-	  				{continue;}
+	  				if(symbol_1==symbol_2)					//保证至少有两种运算符号。
+	  					{continue;}
+	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
+			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c;
+			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c;
+	  				}
+	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2]))  {
+			  			QT_1[i]=+a+SymB[symbol_1]+"(" + b +SymB[symbol_2]+c+")";
+			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]  +c+" ) ";
+	  				}
+	  				else {
+	  					QT_1[i]=+a+SymB[symbol_1]+b+SymB[symbol_2]+c;
+			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" "+c;
+	  				}
 	  				
-		  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c;
-		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c;
 		  			}
 	  			
 	  			else if(symbol_number == 3) {
@@ -249,8 +258,23 @@ public class MathExam6360 {
 	  				{continue;}
 	  				int d=(int)(Math.random()*1000);
 	  				int symbol_3=(int)(Math.random()*4);
-		  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+d;
-		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3] +" "+d;
+	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
+			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c+SymB[symbol_3]+d;
+			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3]+" "+d;
+	  				}
+	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2]))  {
+			  			QT_1[i]=+a+SymB[symbol_1]+"(" + b +SymB[symbol_2]+c+")"+SymB[symbol_3]+d;
+			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]  +c+" ) "+SymB[symbol_3]+" "+d;
+	  				}
+	  				else if(Level(SymB[symbol_2])>Level(SymB[symbol_3]))  {
+			  			QT_1[i]=+a+SymB[symbol_1]+ b +SymB[symbol_2]+"("+c +SymB[symbol_3]+d+")";
+			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" ( " +c+" "+SymB[symbol_3]+" "+d+" ) ";
+	  				}
+	  				else {
+	  					QT_1[i]=+a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+d;
+			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" "+c+" "+SymB[symbol_3]+" "+d;
+	  				}
+	  				
 		  			}
 	  			
 	  			
@@ -261,13 +285,33 @@ public class MathExam6360 {
 	  				int e=(int)(Math.random()*1000);
 	  				int symbol_3=(int)(Math.random()*4);
 	  				int symbol_4=(int)(Math.random()*4);
+	  				if(Level(SymB[symbol_1])<Level(SymB[symbol_2])) {
+			  			QT_1[i]="("+a+SymB[symbol_1]+b+")"+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
+			  			QT[i]="( "+a+" "+SymB[symbol_1]+" "+ b +" ) "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3]+" "+d+" "+SymB[symbol_4]+" "+e;
+	  				}
+	  				else if(Level(SymB[symbol_1])>Level(SymB[symbol_2])) {
+			  			QT_1[i]=a+SymB[symbol_1]+"("+b+SymB[symbol_2]+c+")"+SymB[symbol_3]+d+SymB[symbol_4]+e;
+			  			QT[i]=a+" "+SymB[symbol_1]+" ( "+ b +" "+SymB[symbol_2]+" "+c+" ) "+SymB[symbol_3]+" "+d+" "+SymB[symbol_4]+" "+e;
+	  				}
+	  				else if(Level(SymB[symbol_2])>Level(SymB[symbol_3])) {
+			  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+"("+c+SymB[symbol_3]+d+")"+SymB[symbol_4]+e;
+			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b + " "+SymB[symbol_2]+" ( "+c+" "+SymB[symbol_3]+" "+d+" ) "+" "+SymB[symbol_4]+" "+e;
+	  				}
+	  				else if(Level(SymB[symbol_3])>Level(SymB[symbol_4])) {
+			  			QT_1[i]=a+SymB[symbol_1]+b+SymB[symbol_2]+c+SymB[symbol_3]+"("+d+SymB[symbol_4]+e+")";
+			  			QT[i]=a+" "+SymB[symbol_1]+" "+ b + " "+SymB[symbol_2]+" "+c+" "+SymB[symbol_3]+" ( "+d+" "+SymB[symbol_4]+" "+e+" )";
+	  				}
+	  				else {
 		  			QT_1[i]=a+SymB[symbol_1]+ b+SymB[symbol_2]+c+SymB[symbol_3]+d+SymB[symbol_4]+e;
 		  			QT[i]=a+" "+SymB[symbol_1]+" "+ b +" "+SymB[symbol_2] +" " +c+" "+SymB[symbol_3] +" "+d+" "+SymB[symbol_4]+" "+e;
-		  			}
+	  				}
+	  			}
 	  			else {continue;}
 	  			 List<String> zx= toInfixExpression(QT_1[i]);
 	  			 List<String> rpn=parseSuffixExpression(zx);
 	  			 AS[i]=QT[i]+" = "+reckon(rpn);
+	  			 if(reckon(rpn)<=0)
+	  			 {continue;}
 	  			 i++;
 
 	      	}
@@ -281,6 +325,15 @@ public class MathExam6360 {
 	        for (String str : ls) {
 	            if (str.matches("\\d+")) {
 	                LS.add(str);
+	            }
+	            else if(str.equals("(")) {
+	            	s1.push(str);
+	            }
+	            else if (str.equals(")")) {
+	            	while(!s1.peek().equals("(")) {
+	            		LS.add(s1.pop());
+	            	}
+	            	s1.pop();
 	            }
 	            else {
 	                while (s1.size() != 0 && Level(s1.peek()) >= Level(str)) {
@@ -301,7 +354,7 @@ public class MathExam6360 {
 	        int w = 0;
 	        String str;
 	        char c;
-	        int sum=s.length();
+
 	        do {
 	            if ((c = s.charAt(w)) < 48 || (c = s.charAt(w)) > 57) {
 	                ls.add("" + c);
@@ -349,5 +402,3 @@ public class MathExam6360 {
 		new	MathExam6360(args);
 
 	}
-
-}
