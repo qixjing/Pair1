@@ -105,6 +105,7 @@ public class MathExam {
 			l = 1;
 			// 重新初始化数组
 			ostr = new String[4];
+			//
 			MathExam mathExam = new MathExam();
 			mathExam.Init();
 			str = strbuf.toString();
