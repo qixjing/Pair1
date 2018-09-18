@@ -11,33 +11,47 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 
 public class MathExam {
 	/*
  * 	在原有的V2.0.0版本上加入三年级四则混合运算题
- *     1.删除原有的构造函数以及构造函数的重载；
- *     2.input方法增加了对新传入的"-n"和"-grade"参数的匹配判断； 
- *     3.修改二年级题目生成，只针对乘除做训练，不包含加减运算。
+ *     1.实现了调度场和逆波兰算法；
+ *     2. 实现了生成三年级四则混合运算的题目
+ *     3.实现了三年级题目和答案的写入【还没加序号】
+ *     ps：还未解决除数为0和差值为负数的bug，
  * 		coding ： GBK
- * 		MathExam_V2.0.1
+ * 		MathExam_V2.0.6
  */	
 	int firstNumber, secondNumber;		
 	int symbol;	//运算符号判断
 	static int grade;
 	static int count;		
 	int result;		
+	String operator_Add;
+	
+	//调度场和逆波兰函数定义
+	Stack<String> operators = new Stack<String>();	//存储操作符
+	Stack<String>  operand= new Stack<String>();	//存储操作数
+	private static StringBuilder postfixExpression=new StringBuilder(); //展示表达式
+	Stack<Integer> postfixNumber = new Stack<Integer>();	//计算后缀表达式时存储数字
 	
 	String[] str_ArithmeticProblem = new String[10000];	//存放算术题
 	String[] str_MathAnswer = new String[10000];	//存放题目和标准答案
 	
-	public MathExam(String args0,String args1, String args2, String args3){
-		inPut(args0, args1,args2,args3);
+	public MathExam(String[] args){
+		inPut(args[0], args[1],args[2],args[3]);
 		mathProblem(count);
 		outPut();
+		
 	}
+
+	
 
 	private void inPut(String str0,String str1, String str2, String str3) {
 		// TODO Auto-generated method stub
@@ -46,7 +60,7 @@ public class MathExam {
 		
 		Scanner in = new Scanner(System.in);
 		String regex1 = "0*[1-9]{1}\\d{0,3}";		//正则表达式判断输入参数为非零正整数
-		String regex2 = "0*[1-2]{1}{0}";
+		String regex2 = "0*[1-3]{1}{0}";
 		Pattern pattern1 = Pattern.compile(regex1);		//定义两组对正则表达式的编译对象
 		Pattern pattern2 = Pattern.compile(regex2);
 		Matcher matcher1,matcher2;		//定义两组判断参数与正则表达式的操作引擎
@@ -129,8 +143,113 @@ public class MathExam {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("文件写入有误!");
-		} 
-		
+		} 	
+	}
+	
+	//判断是否操作符
+    private static boolean isOperator(String operator){
+        if (operator.equals("+")||operator.equals("-")||operator.equals("×")||operator.equals("÷")
+                ||operator.equals("(")||operator.equals(")")) {
+            return true;
+        }
+        return false;
+    }
+	
+	//计算操作符的优先级
+    private static int priority(String s){
+        if (s.equals("+") || s.equals("-")) {
+        	return 1;
+        } else if (s.equals("×") || s.equals("÷")) {
+        	return 2;
+        } else if(s.equals("(") || s.equals(")")){
+        	return 3;
+        } else{
+        	return 0;
+        }
+    }
+    
+    //返回一个结果
+    private static int Calculation(int n,int m,String operator){
+    	int result = -4567;
+    	if (operator.equals("+")) {
+    		result = n + m;
+    	} else if (operator.equals("-")) {
+    		result = n - m;
+    	} else if (operator.equals("×")) {
+    		result = n * m;
+    	} else if (operator.equals("÷")) {
+    		result = n / m;
+    	}
+    	return result;
+    }
+
+
+	//调度场算法——[中缀表达式转后缀表达式]
+	private void toPostfixExpression(String str_mix){
+		int len = str_mix.length();
+		char c;
+		String sc;
+		for (int i = 0 ; i <= len-1 ; i++) {
+			c = str_mix.charAt(i); 
+			sc = String.valueOf(c);
+			if(isOperator(sc))	//判断是否是操作符
+			{
+				if(operators.isEmpty()){	//判断为空栈，入栈
+					operators.push(sc);
+				} else {
+					if(priority(operators.peek()) < priority(sc) && !sc.equals(")")){	
+						//栈顶操作符优先级小于当前操作符优先级且操作符不为右括号，入栈
+						operators.push(sc);
+					} else if(priority(operators.peek()) >= priority(sc) && !sc.equals(")")){
+						while(!operators.empty() && !operators.peek().equals("(")	//栈不为空，当前栈顶操作符不为左括号
+								&& priority(operators.peek()) >= priority(sc)){		//操作符优先级小于等于当前栈顶操作符优先级
+							do {
+								operator_Add = operators.pop();
+								postfixExpression.append(operator_Add);
+								operand.push(operator_Add);
+							} while (false);	}	// 栈顶操作符是左括号时停止压栈
+						operators.push(sc);		//否则直接入栈
+					} else if(sc.equals(")")){	//当前扫描到的操作符为右括号(不做入栈操作)，依次压栈相匹配的左括号内容
+						do {
+							operator_Add = operators.pop();
+							postfixExpression.append(operator_Add);
+							operand.push(operator_Add);
+						} while (!operators.peek().equals("("));
+						operators.pop();	//弹出栈顶无用操作符左括号
+					}
+				}
+			}else {	//非操作符
+				if(!sc.equals(" ")){
+					postfixExpression.append(sc);
+					operand.push(sc);					
+				}
+			}
+		}
+		while(!operators.empty()){	//结束字符串扫描后操作符的栈不为空则则压栈
+			operator_Add = operators.pop();
+			postfixExpression.append(operator_Add);
+			operand.push(operator_Add);
+		}
+	}
+	
+	
+	//逆波兰函数
+	private int reversePolish() {
+		// TODO Auto-generated method stub
+		char c;
+		int len = postfixExpression.toString().length();
+		for (int i = 0; i < len; i++) {
+			c = postfixExpression.charAt(i);
+			if(!isOperator(String.valueOf(c))){	//判断非操作符，入栈
+				postfixNumber.push(Integer.parseInt(String.valueOf(c)));
+			} else{
+				int m = postfixNumber.pop();
+				int n = postfixNumber.pop();
+				String operator = String.valueOf(c);
+				postfixNumber.push(Calculation(n, m, operator));	
+			}
+		}
+		return postfixNumber.pop();
 	}
 	
 	//生成算术题
@@ -168,10 +287,45 @@ public class MathExam {
 				default:
 					break;
 				}
-			}
-			
+			}else{
+				fourMixed();
+			}	
 		}
 	}
+	
+	//四则运算：括号算操作符，总共2-4个操作符
+	private void fourMixed() {
+		// TODO Auto-generated method stub
+		int whereBrackets = (int)(Math.random());	//控制左右括号为位置
+		int howManyNum = (int)(Math.random()*3+3);
+		
+		for (int j = 0; j < count; j++) {
+			int n1 = (int)(Math.random()*10+1);
+			int n2 = (int)(Math.random()*10+1);
+			int n3 = (int)(Math.random()*10+1);
+			int n4 = (int)(Math.random()*10+1);
+			int n5 = (int)(Math.random()*10+1);
+			int c1 = (int)(Math.random()*4);
+			int c2 = (int)(Math.random()*4);
+			int c3 = (int)(Math.random()*4);
+			int c4 = (int)(Math.random()*4);
+			String[] cs = {"+","-","×","÷"};
+			if(howManyNum==3) {
+			str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3;
+			toPostfixExpression(str_ArithmeticProblem[j]);
+			str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " = " + reversePolish();
+			} else if(howManyNum==4) {
+				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4;
+				toPostfixExpression(str_ArithmeticProblem[j]);
+				str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " = " + reversePolish();
+			}else if(howManyNum==5) {
+				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5;
+				toPostfixExpression(str_ArithmeticProblem[j]);
+				str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5 + " = " + reversePolish();
+			}
+		}
+	}
+	
 /*
 	 * 加法：
 	 *  1.一二年级的加法的两个加数在20以内。
@@ -218,8 +372,8 @@ public class MathExam {
 			n2 = (int)(Math.random()*10);
 		}
 		result = n1 * n2;
-		str_ArithmeticProblem[i] = "( " + (i+1) +" ) " + n1 + " x " + n2;
-		str_MathAnswer[i] = "( " + (i+1) +" ) " + n1 + " x " + n2 + " = " + result;
+		str_ArithmeticProblem[i] = "( " + (i+1) +" ) " + n1 + " × " + n2;
+		str_MathAnswer[i] = "( " + (i+1) +" ) " + n1 + " × " + n2 + " = " + result;
 	}
 	
 	/*
@@ -250,7 +404,7 @@ public class MathExam {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new MathExam(args[0], args[1],args[2],args[3]);	
+		new MathExam(args);	
 	}
 
 }
