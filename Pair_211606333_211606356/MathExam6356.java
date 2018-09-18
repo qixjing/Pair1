@@ -152,7 +152,7 @@ public class MathExam6356 {
 				}
 			}else {
 				
-				System.out.println("("+i+") "+str[i]);
+				System.out.println("(" + (i + 1) + ") " +str[i]);
 			
 				
 			}
@@ -176,7 +176,7 @@ public class MathExam6356 {
 
 				}
 			}else {
-				System.out.println(AS[i]);
+				System.out.println("(" + (i + 1) + ") " +AS[i]);
 			}
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
@@ -219,8 +219,8 @@ public class MathExam6356 {
 	            if (ssr.matches("\\d+")) {
 	                LS.add(ssr);
 	            }
-	            else {
-	                while (s1.size() != 0 && Operation.getValue(s1.peek()) >= Operation.getValue(ssr)) {
+	            else {Operation a=new Operation();
+	                while (s1.size() != 0 && a.getValue(s1.peek()) >= a.getValue(ssr)) {
 	                    LS.add(s1.pop());
 	                }
 	                s1.push(ssr);
@@ -279,4 +279,37 @@ public class MathExam6356 {
 	        }
 	        return Integer.parseInt(s.pop());
 	    }
+	 public static class Operation { 
+		 private int ADDITION=1;
+		    private int SUBTRACTION=1;
+		    private int MULTIPLICATION=2;
+		    private int DIVISION=2;
+		 Operation() {
+			
+		 }
+		    
+
+		    public int getValue(String operation){
+		        int result;
+		        switch (operation){
+		            case "+":
+		                result=ADDITION;
+		                break;
+		            case "-":
+		                result=SUBTRACTION;
+		                break;
+		            case "×":
+		                result=MULTIPLICATION;
+		                break;
+		            case "÷":
+		                result=DIVISION;
+		                break;
+		            default:
+//		                System.out.println("不存在该运算符");
+		                result=0;
+		        }
+		        return result;
+		    }
+		}
+
 }
