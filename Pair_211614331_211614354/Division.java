@@ -18,12 +18,12 @@ public class Division extends Operation{
 		}while(answerNumber>=10 || firstNumber<secondNumber);
 		
 		if(remainder==0) {
-			answerSet.add("("+testNumber+")"+" "+firstNumber+" / "+secondNumber+" =");//把结果输出的集合中
-			answerSet.add(" "+answerNumber); //把答案输出到集合中
+			answerSet.add("("+testNumber+")"+" "+firstNumber+" / "+secondNumber);//把结果输出的集合中
+			answerSet.add(" = "+answerNumber); //把答案输出到集合中
 		}
 		else {
-			answerSet.add("("+testNumber+")"+" "+firstNumber+" / "+secondNumber+" =");//把结果输出的集合中
-			answerSet.add(" "+answerNumber+"..."+remainder); //把答案输出到集合中
+			answerSet.add("("+testNumber+")"+" "+firstNumber+" / "+secondNumber);//把结果输出的集合中
+			answerSet.add(" = "+answerNumber+"..."+remainder); //把答案输出到集合中
 		}
 		
 		

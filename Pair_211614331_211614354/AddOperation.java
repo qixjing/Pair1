@@ -35,8 +35,8 @@ public class AddOperation extends Operation{
 			
 
 		}
-		answerSet.add("("+testNumber+")"+" "+firstNumber+" + "+secondNumber+" =");//把结果输出的集合中
-		answerSet.add(" "+answerNumber); //把答案输出到集合中
+		answerSet.add("("+testNumber+")"+" "+firstNumber+" + "+secondNumber);//把结果输出的集合中
+		answerSet.add(" = "+answerNumber); //把答案输出到集合中
 		
 	}
 	

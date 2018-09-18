@@ -1,7 +1,7 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+
 
 public class OutPutSet {                //用于输出集合中的题目
 

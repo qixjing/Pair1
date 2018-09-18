@@ -63,6 +63,10 @@ public class RandomQuestions extends Operation{
 			}
 		} while (isAdd == howMany || isSub == howMany || isMult == howMany || isDivison == howMany);
 		
+		isAdd=0; // 清空计数器
+		isSub=0;
+		isMult=0;
+		isDivison=0;
 		
 		needBracket = rand.nextBoolean(); // 是否需要括号
 		
@@ -79,23 +83,42 @@ public class RandomQuestions extends Operation{
 					}
 				}
 			}
-			for(int i = 0;i < problemSet.size(); i++) {
-				problem=problem+problemSet.get(i); // 传递给其他的类运算用的
-				problemSave=problemSave+" "+problemSet.get(i);
+		
+		
+			/*
+			 更新，不用字符串传递题目，改用集合把题目传入需要调用的类中，
+			 字符串只是单纯的保留题目
+			 
+			*/
+			
+			for (int i = 0; i < problemSet.size(); i++) {
+
+				if (i == problemSet.size() - 1) {
+					problemSave = problemSave + problemSet.get(i);
+				} else
+					problemSave = problemSave + problemSet.get(i) + " ";
+
 			}
-			FindBracket findBracket=new FindBracket();
-			findBracket.findOne(problem);						// 把题目传入给找括号对象
-			System.out.println(problemSave+ " = " + answerNumber);
+
+		//	System.out.println(problemSave);
+
 			return problemSave;
+		
+		
+			
+			
+			
+			
+			
 		}
 		
 		
 		
 		
-		//System.out.println(problemSet);
 		
 		
-	//}
+		
+//}
 	
 	public  void positionCode(int howMany) {	// 获取括号标准定位码
 		
