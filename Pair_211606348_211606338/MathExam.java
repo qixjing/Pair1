@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class MathExam {
-
+	/* 主函数功能：
+	 * 1.check()检查输入参数的各种bug
+	 * 2.if判断当前输入的年级、根据年级进入不同的题目生成器
+	 * 3.outPutFile()函数将题目和答案输出成out.txt
+	 * */
 	public static void main(String[] args) throws Exception {
 		// 检测输入参数的各种bug
 		if (!check(args))return;
 		//判断年级
 		else if (args[0].equals("-grade") && args[1].equals("3") || args[2].equals("-grade") && args[3].equals("3")) {
 			StringBuffer strbuf2 = init3(args);
+			outPutFile(strbuf2);
 		} else {
 			//将4个参数改成2个参数传给运算1、2年级的程序
 			String[] strArgs = new String[2];
@@ -21,6 +26,7 @@ public class MathExam {
 			StringBuffer stringBuffer = new StringBuffer();
 			// 初始化获取题目和答案
 			init1_2(stringBuffer, strArgs);
+			outPutFile(stringBuffer);
 		}
 	}
 
@@ -442,5 +448,22 @@ public class MathExam {
 			oper.pop();
 		}
 		return CalPoland(node, cnt);
+	}
+	public static void outPutFile(StringBuffer strbuf) {
+		// 将题目和答案的可变字符串转成二级制
+		byte[] bytes = new String(strbuf).getBytes();
+		// 将二进制传入文件输出流输出成out.txt
+		try {
+			FileOutputStream fos = new FileOutputStream("out.txt");
+			try {
+				fos.write(bytes);
+			} catch (IOException e) {
+				System.out.println("文件写出错误");
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("文件未找到！！");
+		}
+		// 输出程序执行的结果
+		System.out.println("题目已经生成，详情请见out.txt");
 	}
 }
