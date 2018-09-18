@@ -19,7 +19,18 @@ public class MathExamV2_6374 {
 		Scanner input=new Scanner(System.in);
 		int flag=0,flag2=0;
 		int []c =new int [args.length] ;    // 创建一个数组存入参数
-	
+	    if(args[0].equals("-n")) 
+	    {
+			c[0] = Integer.parseInt(args[1]);
+			c[1] = Integer.parseInt(args[3]);
+			flag2=1;
+			}
+			else if(args[0].equals("-grade"))
+			{
+				c[0] = Integer.parseInt(args[3]);
+				c[1] = Integer.parseInt(args[1]);
+				flag2=2;
+			}
 		String[] timu=new String[c[0]+1];	// 创建数组存入题目
 		String[] daan=new String[c[0]+1];
 		String huanhang="\r\n";    // windows的换行，在cmd运行方便观看
