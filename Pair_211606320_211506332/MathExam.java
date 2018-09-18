@@ -1,8 +1,8 @@
 /**
- * 
- * 
- * 
- * 
+ * 使用Tab键缩进，不手动空格
+ * 单行字符数限制不超过120个
+ * 按功能注释，每个功能回车一行进行注释
+ * 并人工检查代码是否符合规范
  */
 
 import java.io.File;
@@ -31,7 +31,7 @@ public class MathExam {
 	
 	static Random random=new Random();
 	
-	static List<String> RPN = new ArrayList<String>();
+	static List<String> RPN;
 //	定义一个stack纪录运算符
 	static Stack<String> ops = new Stack<String>();
 //	首先完成一下初始化工作：
@@ -250,6 +250,7 @@ public class MathExam {
 	
 //	运用逆波兰算法计算结果
 	public static void RPNcalculate(String str) {
+		RPN = new ArrayList<String>();
 		String[] RPNStr= str.split(" ");
 		fixPosition(RPNStr);
 		calculate();
