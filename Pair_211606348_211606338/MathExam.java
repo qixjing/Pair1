@@ -8,11 +8,11 @@ public class MathExam {
 
 	public static void main(String[] args) throws Exception {
 
-		//判断年级
+		// 判断年级
 		if (args[0].equals("-grade") && args[1].equals("3") || args[2].equals("-grade") && args[3].equals("3")) {
 			StringBuffer strbuf2 = init3(args);
 		} else {
-			//将4个参数改成2个参数传给运算1、2年级的程序
+			// 将4个参数改成2个参数传给运算1、2年级的程序
 			String[] strArgs = new String[2];
 			strArgs[0] = args[args[0].equals("-n") ? 1 : 3];
 			strArgs[1] = args[args[0].equals("-grade") ? 1 : 3];
@@ -79,7 +79,7 @@ public class MathExam {
 							flag1 = 1;
 						}
 					}
- 				} else {
+				} else {
 					if (flag == 0 && flag1 == 1) {
 						strbuf.append(random + " )" + " ");
 						flag1 = 0;
@@ -123,6 +123,7 @@ public class MathExam {
 		strbuf2.append(strbuf1);
 		return strbuf2;
 	}
+
 	/*
 	 * init函数产生题目和答案
 	 */
@@ -267,6 +268,7 @@ public class MathExam {
 		mp.put('÷', 2);
 		mp.put('^', 3);
 	}
+
 	// 逆波兰表达式的计算
 	double CalPoland(Node node[], int n) throws Exception {
 		Stack<Double> s = new Stack<>();
@@ -301,6 +303,7 @@ public class MathExam {
 		}
 		return s.peek();
 	}
+
 	// 调度场算法
 	double ShuntYardAlgo(char str[]) throws Exception {
 		Stack<Character> oper = new Stack<>();
@@ -391,4 +394,3 @@ public class MathExam {
 		}
 		return CalPoland(node, cnt);
 	}
-}
