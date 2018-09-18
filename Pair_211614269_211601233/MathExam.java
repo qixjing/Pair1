@@ -262,14 +262,26 @@ public class MathExam {
 					int x = (int) (1 + Math.random() * (4 - 1 + 1));
 					if (x == 1) {
 						sym = "+";
+						pro.add(sym);
 					} else if (x == 2) {
 						sym = "-";
+						pro.add(sym);
 					} else if (x == 3) {
 						sym = "*";
+						pro.add(sym);
 					} else {
 						sym = "/";
+						//找到被除数
+						int bcs=Integer.parseInt(pro.get(pro.size()-1));
+						pro.add(sym);
+						int cs=(int) (1 + Math.random() * (99 - 1 + 1));
+						while(bcs%cs!=0) {
+							cs=(int) (1 + Math.random() * (99 - 1 + 1));
+						}
+						pro.add(String.valueOf(cs));
+						i++;
 					}
-					pro.add(sym);
+					
 				}
 			}
 			// 将被拆分的题目转成不带题号的字符串
