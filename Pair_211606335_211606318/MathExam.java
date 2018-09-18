@@ -21,10 +21,10 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 public class MathExam {
 	/*
  * 	在原有的V2.0.0版本上加入三年级四则混合运算题
- *     1.实现了三年级题目和答案添加序列号
+ *     1.增加了括号的随机性；
  *     ps：还未解决除数为0和差值为负数的bug，
  * 		coding ： GBK
- * 		MathExam_V2.0.7
+ * 		MathExam_V2.0.8
  */	
 	int firstNumber, secondNumber;		
 	int symbol;	//运算符号判断
@@ -298,24 +298,50 @@ public class MathExam {
 		int howManyNum = (int)(Math.random()*3+3);
 		StringBuilder bf_sequence;
 		for (int j = 0; j < count; j++) {
-			int n1 = (int)(Math.random()*10);
-			int n2 = (int)(Math.random()*10);
-			int n3 = (int)(Math.random()*10);
-			int n4 = (int)(Math.random()*10);
-			int n5 = (int)(Math.random()*10);
+			int n =  	(int)(Math.random());
+			int n6= (int)(Math.random()*5);
+			int n1 = (int)(Math.random()*9+1);
+			int n2 = (int)(Math.random()*9+1);
+			int n3 = (int)(Math.random()*9+1);
+			int n4 = (int)(Math.random()*9+1);
+			int n5 = (int)(Math.random()*9+1);
 			int c1 = (int)(Math.random()*4);
 			int c2 = (int)(Math.random()*4);
 			int c3 = (int)(Math.random()*4);
 			int c4 = (int)(Math.random()*4);
 			String[] cs = {"+","-","×","÷"};
-			if(howManyNum==3) {
-			str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3;
+			if(howManyNum==3 && n==0 ) {
+			str_ArithmeticProblem[j] = "( " +n1 + " " + cs[c1] + " " + n2 +" ) " + " " + cs[c2] + " " + n3;
 			toPostfixExpression(str_ArithmeticProblem[j]);
-			str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " = " + reversePolish();
-			} else if(howManyNum==4) {
-				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4;
+			str_MathAnswer[j] ="( " + (j+1) + " ) " +"( " +n1 + " " + cs[c1] + " " + n2 +" ) "+ " " + cs[c2] + " " + n3 + " = " + reversePolish();
+			}
+			if(howManyNum==3 && n==1) {
+				str_ArithmeticProblem[j] =  n1 + " " + cs[c1] + " " +"( " +n2 + " " + cs[c2] + " " + n3 + " ) ";
 				toPostfixExpression(str_ArithmeticProblem[j]);
-				str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " = " + reversePolish();
+				str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " +"( " +n2 + " " + cs[c2] + " " + n3+ " ) " + " = " + reversePolish();
+				} 
+			if(howManyNum==4 ) {
+				if( n6==0){
+				str_ArithmeticProblem[j] ="( "+ n1 + " " + cs[c1] + " " + n2 +" ) "+ " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4;
+				toPostfixExpression(str_ArithmeticProblem[j]);
+				str_MathAnswer[j] ="( " + (j+1) + " ) " + "( "+ n1 + " " + cs[c1] + " " + n2 +" ) " + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " = " + reversePolish();
+			}if( n6==1){
+				str_ArithmeticProblem[j] ="( "+ n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 +" ) "+ " " + cs[c3] + " " + n4;
+			toPostfixExpression(str_ArithmeticProblem[j]);
+			str_MathAnswer[j] ="( " + (j+1) + " ) " + "( "+ n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " ) "+" " + cs[c3] + " " + n4 + " = " + reversePolish();
+			}if( n6==2){
+				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " +"( "+ n2 + " " + cs[c2] + " " + n3 +" ) "+ " " + cs[c3] + " " + n4;
+			toPostfixExpression(str_ArithmeticProblem[j]);
+			str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + "( "+ n2 + " " + cs[c2] + " " + n3 + " ) "+" " + cs[c3] + " " + n4 + " = " + reversePolish();
+			}if( n6==3){
+				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " +"( "+ n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4+" ) ";
+			toPostfixExpression(str_ArithmeticProblem[j]);
+			str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + "( "+ n2 + " " + cs[c2] + " " + n3 +" " + cs[c3] + " " + n4+ " ) " + " = " + reversePolish();
+			}if( n6==4){
+				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " +"( "+ n3 + " " + cs[c3] + " " + n4+" ) ";
+			toPostfixExpression(str_ArithmeticProblem[j]);
+			str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + "( " + n3 +" " + cs[c3] + " " + n4+ " ) " + " = " + reversePolish();
+			}
 			}else if(howManyNum==5) {
 				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5;
 				toPostfixExpression(str_ArithmeticProblem[j]);
