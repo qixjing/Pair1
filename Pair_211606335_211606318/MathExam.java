@@ -21,12 +21,10 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 public class MathExam {
 	/*
  * 	在原有的V2.0.0版本上加入三年级四则混合运算题
- *     1.实现了调度场和逆波兰算法；
- *     2. 实现了生成三年级四则混合运算的题目
- *     3.实现了三年级题目和答案的写入【还没加序号】
+ *     1.实现了三年级题目和答案添加序列号
  *     ps：还未解决除数为0和差值为负数的bug，
  * 		coding ： GBK
- * 		MathExam_V2.0.6
+ * 		MathExam_V2.0.7
  */	
 	int firstNumber, secondNumber;		
 	int symbol;	//运算符号判断
@@ -187,7 +185,7 @@ public class MathExam {
 	//调度场算法——[中缀表达式转后缀表达式]
 	private void toPostfixExpression(String str_mix){
 		int len = str_mix.length();
-		char c;
+		char c,nextChar;
 		String sc;
 		for (int i = 0 ; i <= len-1 ; i++) {
 			c = str_mix.charAt(i); 
@@ -298,13 +296,13 @@ public class MathExam {
 		// TODO Auto-generated method stub
 		int whereBrackets = (int)(Math.random());	//控制左右括号为位置
 		int howManyNum = (int)(Math.random()*3+3);
-		
+		StringBuilder bf_sequence;
 		for (int j = 0; j < count; j++) {
-			int n1 = (int)(Math.random()*10+1);
-			int n2 = (int)(Math.random()*10+1);
-			int n3 = (int)(Math.random()*10+1);
-			int n4 = (int)(Math.random()*10+1);
-			int n5 = (int)(Math.random()*10+1);
+			int n1 = (int)(Math.random()*10);
+			int n2 = (int)(Math.random()*10);
+			int n3 = (int)(Math.random()*10);
+			int n4 = (int)(Math.random()*10);
+			int n5 = (int)(Math.random()*10);
 			int c1 = (int)(Math.random()*4);
 			int c2 = (int)(Math.random()*4);
 			int c3 = (int)(Math.random()*4);
@@ -313,16 +311,18 @@ public class MathExam {
 			if(howManyNum==3) {
 			str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3;
 			toPostfixExpression(str_ArithmeticProblem[j]);
-			str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " = " + reversePolish();
+			str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " = " + reversePolish();
 			} else if(howManyNum==4) {
 				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4;
 				toPostfixExpression(str_ArithmeticProblem[j]);
-				str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " = " + reversePolish();
+				str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " = " + reversePolish();
 			}else if(howManyNum==5) {
 				str_ArithmeticProblem[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5;
 				toPostfixExpression(str_ArithmeticProblem[j]);
-				str_MathAnswer[j] = n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5 + " = " + reversePolish();
+				str_MathAnswer[j] ="( " + (j+1) + " ) " + n1 + " " + cs[c1] + " " + n2 + " " + cs[c2] + " " + n3 + " " + cs[c3] + " " + n4 + " " + cs[c4] + " " + n5 + " = " + reversePolish();
 			}
+			bf_sequence = new StringBuilder("( " + (j+1) + " ) ") ;	//给题目添加序列号
+			str_ArithmeticProblem[j] = bf_sequence.append(str_ArithmeticProblem[j]).toString();
 		}
 	}
 	
