@@ -66,11 +66,11 @@ public class TopicGradeThree {
 		}
 		else{
 			a1 = Topic.createRandomNumber(25, 50);
-			String s [] = {"+","*","-"};
-			String symbol1 = s[Topic.createRandomNumber(0, 2)];
+			String s [] = {"+","*"};
+			String symbol1 = s[Topic.createRandomNumber(0, 1)];
 			a2 = Topic.createRandomNumber(5, 10);
 			a3 = Topic.createRandomNumber(5, 10);
-			String symbol2 = s[Topic.createRandomNumber(0, 2)];
+			String symbol2 = s[Topic.createRandomNumber(0, 1)];
 			topic.append(a1 + " " + symbol1 + " " + a2 +  " " + symbol2 + " " + a3);
 			return topic;
 		}

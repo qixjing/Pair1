@@ -8,10 +8,6 @@ public class Bean {
 	private int numberB = 0;
 	private int result = 0; // 运算结果
 	private int mod = 0; // 除法运算中的余数
-	private StringBuffer text1 = new StringBuffer(""); // 题目， 格式: A + B =
-	private StringBuffer text2 = new StringBuffer(""); // 答案 ，格式: A + B = C
-	private String txt = null; // txt = text1 + text2
-	private StringBuffer topic=new StringBuffer(""); //存年级3的题目
 
 	public String getSymbol() {
 		return symbol;
@@ -45,11 +41,6 @@ public class Bean {
 		this.result = result;
 	}
 
-	
-	public String getTxt() {
-		return txt;
-	}
-
 	public int getMod() {
 		return mod;
 	}
@@ -58,12 +49,5 @@ public class Bean {
 		this.mod = mod;
 	}
 
-	public StringBuffer getTopic() {
-		return topic;
-	}
-
-	public void setTopic(StringBuffer topic) {
-		this.topic = topic;
-	}
 
 }

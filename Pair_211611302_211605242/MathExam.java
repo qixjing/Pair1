@@ -44,7 +44,7 @@ public class MathExam{
 					mod = 0;
 				}
 				topic3.append("\n");
-
+				//( 360 - 71 ) / 17 - 17 = 0        ´ý½â¾ö
 			}
 		} else if (grade == 3) {
 			for (int i = 0; i < numberOfTopics; i++) {
@@ -58,6 +58,7 @@ public class MathExam{
 		}
 		String txt = String.valueOf(topic2) + "\n" + String.valueOf(topic3);
 //		System.out.println(txt);
+//		txt=txt.replaceAll("\\*", "x");
 		createMathExamTxt(txt);
 	}
 
