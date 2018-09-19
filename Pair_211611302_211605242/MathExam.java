@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MathExam3 {
+public class MathExam{
 	private Bean bean = null;
 	private static int grade = 0; // 年级
 	private static int numberOfTopics = 0; // 出题数
@@ -14,7 +14,7 @@ public class MathExam3 {
 
 	public static void main(String[] args) {
 		checkInput(args);
-		new MathExam3().start();
+		new MathExam().start();
 	}
 
 	private void start() {
@@ -56,9 +56,9 @@ public class MathExam3 {
 				topic3.append("(" + (i + 1) + ") " + topic1 + " = " + result + "\n");
 			}
 		}
-		System.out.println(topic2);
-		System.out.println(topic3);
-		createMathExamTxt();
+		String txt = String.valueOf(topic2) + "\n" + String.valueOf(topic3);
+//		System.out.println(txt);
+		createMathExamTxt(txt);
 	}
 
 	// 检查输入的参数是否符合规范
@@ -110,11 +110,11 @@ public class MathExam3 {
 	}
 
 	// 产生txt文本
-	private void createMathExamTxt() {
+	private void createMathExamTxt(String txt) {
 		try {
 			FileOutputStream fos = new FileOutputStream("out.txt");
 			PrintStream ps = new PrintStream(fos);
-			ps.println(bean.getTxt());
+			ps.println(txt);
 			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
