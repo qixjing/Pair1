@@ -41,12 +41,12 @@ public class ArithemticS extends Operation{
 				case "+":{					
 					if(!shortStack.isEmpty()) {
 						
-						 if(shortStack.peek().matches("[\\+\\-\\*\\/]")) {	// 栈顶为同级或加减
+						 if(shortStack.peek().matches("[\\+\\-\\×\\÷]")) {	// 栈顶为同级或加减
 							 do {
 								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
-							 }while(shortStack.peek().matches("[\\+\\-\\*\\/]") );
+							 }while(shortStack.peek().matches("[\\+\\-\\×\\÷]") );
 							 shortStack.push(partNumber);	// 把当前元素入栈
 						 }
 						 else
@@ -62,13 +62,13 @@ public class ArithemticS extends Operation{
 					
 					if(!shortStack.isEmpty()) {
 						
-						 if(shortStack.peek().matches("[\\+\\-\\*\\/]")) {	// 栈顶为同级或加减
+						 if(shortStack.peek().matches("[\\+\\-\\×\\÷]")) {	// 栈顶为同级或加减
 							 do {
 								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
 								 
-							 }while(shortStack.peek().matches("[\\+\\-\\*\\/]") );
+							 }while(shortStack.peek().matches("[\\+\\-\\×\\÷]") );
 							 shortStack.push(partNumber);	// 把当前元素入栈
 						 }
 						 else
@@ -80,16 +80,16 @@ public class ArithemticS extends Operation{
 					//System.out.println("后缀栈当前为："+PostfixStack);
 					break;
 				}
-				case "*":{ 
+				case "×":{ 
 					
 					if(!shortStack.isEmpty()) {
 						
-						 if(shortStack.peek().matches("[\\*\\/]") ) {	// 栈顶为同级或加减
+						 if(shortStack.peek().matches("[\\×\\÷]") ) {	// 栈顶为同级或加减
 							 do {
 								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，变空
-							 }while(shortStack.peek().matches("[\\*\\/]"));
+							 }while(shortStack.peek().matches("[\\×\\÷]"));
 							 shortStack.push(partNumber);	// 把当前元素入栈
 						 }
 						 else
@@ -101,15 +101,15 @@ public class ArithemticS extends Operation{
 					//System.out.println("后缀栈当前为："+PostfixStack);
 					break;
 				}
-				case "/":{
+				case "÷":{
 					if(!shortStack.isEmpty()) {
 						
-						 if(shortStack.peek().matches("[\\*\\/]") ) {	// 栈顶为同级或加减
+						 if(shortStack.peek().matches("[\\×\\÷]") ) {	// 栈顶为同级或加减
 							 do {
 								 postFixStack.push(shortStack.pop());
 								 if(shortStack.isEmpty())
 									 break;//弹玩后，栈变空，也结束循环
-							 }while(shortStack.peek().matches("[\\*\\/]") );
+							 }while(shortStack.peek().matches("[\\×\\÷]") );
 							 shortStack.push(partNumber);	// 把当前元素入栈
 						 }
 						 else
@@ -193,7 +193,7 @@ public class ArithemticS extends Operation{
 					runAnswer.push(String.valueOf(answerNumber));
 					break;
 				}
-				case "*":{
+				case "×":{
 					answerNumber=firstNumber*secondNumber;
 					if(answerNumber<0) // 三年级年级限制
 					{
@@ -202,7 +202,7 @@ public class ArithemticS extends Operation{
 					runAnswer.push(String.valueOf(answerNumber));
 					break;
 				}
-				case "/":{
+				case "÷":{
 					try {
 						if(secondNumber%firstNumber != 0 || secondNumber==0) { // 年级限制，整除，且不为负数
 							return false;

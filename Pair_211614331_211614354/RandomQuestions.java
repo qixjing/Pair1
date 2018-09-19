@@ -5,7 +5,7 @@ public class RandomQuestions extends Operation{
 	
 	 String  sProblem = "";	// 存储题目
 	 boolean needBracket = false;// 是否需要括号
-	 int howMany = 0;// 需要几个运算符
+	 int howMany = 0;// 需要几个运算符1
 	 int bracketNumber = 0; // 如果需要括号，要几个
 	 int whichSymbol = 0; // 判断是哪一个运算符号
 	 int number = 0;// 随机产生的数字
@@ -46,12 +46,12 @@ public class RandomQuestions extends Operation{
 						break;
 					}
 					case 2: {
-						problemSet.add("*");
+						problemSet.add("×");
 						isMult++;
 						break;
 					}
 					case 3: {
-						problemSet.add("/");
+						problemSet.add("÷");
 						isDivison++;
 						break;
 					}
