@@ -57,8 +57,10 @@ public class MathExam{
 			}
 		}
 		String txt = String.valueOf(topic2) + "\n" + String.valueOf(topic3);
+		
+		txt=txt.replaceAll("\\*","¡Á");
+		txt=txt.replaceAll("\\/","¡Â");
 //		System.out.println(txt);
-//		txt=txt.replaceAll("\\*", "x");
 		createMathExamTxt(txt);
 	}
 
