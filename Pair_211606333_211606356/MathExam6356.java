@@ -17,7 +17,7 @@ public class MathExam6356 {
 	static String AS[];
 	static Random fuhao = new Random();
 	static Random num1 = new Random();
-	static Random num2 = new Random();// ÖÖ×ÓÏàÍ¬µÄRandom¶ÔÏó£¬Éú³ÉµÄËæ»úÊıĞòÁĞÊÇÒ»ÑùµÄ¡£
+	static Random num2 = new Random();// ç§å­ç›¸åŒçš„Randomå¯¹è±¡ï¼Œç”Ÿæˆçš„éšæœºæ•°åºåˆ—æ˜¯ä¸€æ ·çš„ã€‚
 	private static int i;
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -27,7 +27,7 @@ public class MathExam6356 {
 
 	private static void init(String[] input) throws FileNotFoundException {
 		if (input.length == 0) {
-			// Ä¬ÈÏ²ÎÊı
+			// é»˜è®¤å‚æ•°
 			n = 100;
 			grade = 3;
 		} else if (input.length == 4) {
@@ -36,7 +36,7 @@ public class MathExam6356 {
 					n = Integer.parseInt(input[1]);
 					grade = Integer.parseInt(input[3]);
 				} catch (NumberFormatException e) {
-					System.out.println("ÇëÊäÈëÕıÕûÊı£¡");
+					System.out.println("è¯·è¾“å…¥æ­£æ•´æ•°ï¼");
 				}
 
 			} else if (input[2].equals("-n") && input[0].equals("-grade")) {
@@ -44,12 +44,12 @@ public class MathExam6356 {
 					n = Integer.parseInt(input[3]);
 					grade = Integer.parseInt(input[1]);
 				} catch (NumberFormatException e) {
-					System.out.println("ÇëÊäÈëÕıÕûÊı£¡");
+					System.out.println("è¯·è¾“å…¥æ­£æ•´æ•°ï¼");
 				}
 
 			}
 		} else {
-			System.out.println("ÄúÊäÈëµÄ²ÎÊıÓĞÎó£¬ÇëÖØĞÂÔËĞĞ£¡");
+			System.out.println("æ‚¨è¾“å…¥çš„å‚æ•°æœ‰è¯¯ï¼Œè¯·é‡æ–°è¿è¡Œï¼");
 			System.exit(0);
 		}
 		if (grade == 1) {
@@ -59,11 +59,11 @@ public class MathExam6356 {
 		} else if (grade == 3) {
 			gradeThree();
 		} else {
-			System.out.println("Ä¿Ç°Ö»Ö§³Ö1-3Äê¼¶£¬ÇëÖØĞÂÊäÈë");
+			System.out.println("ç›®å‰åªæ”¯æŒ1-3å¹´çº§ï¼Œè¯·é‡æ–°è¾“å…¥");
 		}
 		File file = new File("out.txt");
 		PrintStream ps = new PrintStream(file);
-		System.setOut(ps);// °Ñ´´½¨µÄ´òÓ¡Êä³öÁ÷¸³¸øÏµÍ³¡£
+		System.setOut(ps);// æŠŠåˆ›å»ºçš„æ‰“å°è¾“å‡ºæµèµ‹ç»™ç³»ç»Ÿã€‚
 		outPut();
 	}
 
@@ -72,30 +72,30 @@ public class MathExam6356 {
 		str = new String[n];
 		AS = new String[n];
 		for (int i = 0; i < n; i++) {
-			int n1 = num1.nextInt(2) + 3;// Ëæ»ú·ûºÅµÄ¸öÊı
-			a = new int[n1];// ÔËËã·û¸öÊı
-			b = new int[n1 + 1];// Êı×ÖµÄ¸öÊı
-			String fuhao[] = { "+", "-", "¡Á", "¡Â" };
-			String fuhao1[] = new String[4]; // ÅĞ¶Ï·ûºÅ
+			int n1 = num1.nextInt(2) + 3;// éšæœºç¬¦å·çš„ä¸ªæ•°
+			a = new int[n1];// è¿ç®—ç¬¦ä¸ªæ•°
+			b = new int[n1 + 1];// æ•°å­—çš„ä¸ªæ•°
+			String fuhao[] = { "+", "-", "Ã—", "Ã·" };
+			String fuhao1[] = new String[4]; // åˆ¤æ–­ç¬¦å·
 			for (int j = 0; j < n1; j++) {
 				a[j] = num1.nextInt(4);
-				fuhao1[j] = fuhao[a[j]];// Ëæ»úÉú³Én1¸öÔËËã·û
+				fuhao1[j] = fuhao[a[j]];// éšæœºç”Ÿæˆn1ä¸ªè¿ç®—ç¬¦
 			}
 
 			for (int k = 0; k < n1 + 1; k++) {
-				b[k] = num2.nextInt(100) + 1;// ¸ù¾İÔËËã·û¸öÊıËæ»úÉú³Én+1¸öÊı×Ö
+				b[k] = num2.nextInt(100) + 1;// æ ¹æ®è¿ç®—ç¬¦ä¸ªæ•°éšæœºç”Ÿæˆn+1ä¸ªæ•°å­—
 			}
 			String[] str2 = new String[n1 + 1];
-			int[] flag = new int[n1 + 1];// ±ê¼ÇÊı×é0(,1ÎŞ·ûºÅ,2)
+			int[] flag = new int[n1 + 1];// æ ‡è®°æ•°ç»„0(,1æ— ç¬¦å·,2)
 			for (int j = 0; j < n1 + 1; j++) {
 				str2[j] = Integer.toString(b[j]);
 				flag[j] = 1;
 			}
 			int front = -2;
-			String ss = null;// ÓÃÀ´±£´æÒ»¸öËãÊ½£¬ÈÃËüÏÈÎªÒ»¸öÊı×Ö
+			String ss = null;// ç”¨æ¥ä¿å­˜ä¸€ä¸ªç®—å¼ï¼Œè®©å®ƒå…ˆä¸ºä¸€ä¸ªæ•°å­—
 			for (int x = 0; x < n1; x++) {
 				if (fuhao1[x].equals("+") || fuhao1[x].equals("-")) {
-					int n2 = (int) (0 + Math.random() * (2 - 1 + 1));// Ëæ»úÉú³É0»ò1£¬ÓÃÀ´Ëæ»úÉú³É¼Ó¼õ·¨µÄÀ¨ºÅ
+					int n2 = (int) (0 + Math.random() * (2 - 1 + 1));// éšæœºç”Ÿæˆ0æˆ–1ï¼Œç”¨æ¥éšæœºç”ŸæˆåŠ å‡æ³•çš„æ‹¬å·
 					boolean tag = false;
 					if (n2 == 0) {
 						if (front == x - 1) {
@@ -138,8 +138,8 @@ public class MathExam6356 {
 		}
 		List<String> infixorder = null;
 		for (int i = 0; i < str.length; i++) {
-			infixorder = toInfixExpression(str[i]);// ÖĞĞò±í´ïÊ½
-			List<String> suffix = parseSuffixExpression(infixorder);// ºóĞø
+			infixorder = toInfixExpression(str[i]);// ä¸­åºè¡¨è¾¾å¼
+			List<String> suffix = parseSuffixExpression(infixorder);// åç»­
 			AS[i] = str[i] + "=" + answer(suffix);
 		}
 
@@ -150,10 +150,10 @@ public class MathExam6356 {
 		b = new int[n];
 		c = new int[n];
 		for (int i = 0; i < n; i++) {
-			a[i] = num1.nextInt(9); // 0-100µÄËæ»úÊı
+			a[i] = num1.nextInt(9); // 0-100çš„éšæœºæ•°
 			b[i] = num2.nextInt(9);
-			c[i] = fuhao.nextInt(2);// 0ÊÇ³Ë·¨1ÊÇ³ı·¨
-			if (c[i] == 1 || b[i] == 0) {// ³ıÊıÊÇ0ÖØĞÂËæ»ú
+			c[i] = fuhao.nextInt(2);// 0æ˜¯ä¹˜æ³•1æ˜¯é™¤æ³•
+			if (c[i] == 1 || b[i] == 0) {// é™¤æ•°æ˜¯0é‡æ–°éšæœº
 				b[i] = num2.nextInt(8) + 1;
 			}
 			if (c[i] == 0 || (a[i] == 0 && b[i] == 0)) {
@@ -184,7 +184,7 @@ public class MathExam6356 {
 
 			}
 		}
-		System.out.println("--------------±ê×¼´ğ°¸----------------");
+		System.out.println("");
 		for (int i = 0; i < n; i++) {
 			if (grade == 1) {
 				if (c[i] == 0) {
@@ -206,9 +206,9 @@ public class MathExam6356 {
 				System.out.println("(" + (i + 1) + ") " + AS[i]);
 			}
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyÄêMMÔÂddÈÕ HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyå¹´MMæœˆddæ—¥ HH:mm");
 		String time = sdf.format(new Date());
-		System.out.println("211606356 ³ÂÓî 211606333ÎÂÖ¾Ãú " + time);// Êä³öÑ§ºÅĞÕÃûÊ±¼ä
+		System.out.println("211606356 é™ˆå®‡ 211606333æ¸©å¿—é“­ " + time);// è¾“å‡ºå­¦å·å§“åæ—¶é—´
 	}
 
 	public static void gradeOne() {
@@ -217,21 +217,21 @@ public class MathExam6356 {
 		c = new int[n];
 
 		for (int i = 0; i < n; i++) {
-			a[i] = num1.nextInt(100);// 0-100µÄËæ»úÊı
+			a[i] = num1.nextInt(100);// 0-100çš„éšæœºæ•°
 			b[i] = num2.nextInt(100);
 			c[i] = fuhao.nextInt(2);
 		}
 		for (int i = 0; i < n; i++) {
-			if (c[i] == 0) {// Ëæ»ú¼Ó·¨
+			if (c[i] == 0) {// éšæœºåŠ æ³•
 				while (a[i] + b[i] > 100) {
-					// Ëæ»ú¼õ·¨
+					// éšæœºå‡æ³•
 					a[i] = num1.nextInt(100);
 					b[i] = num2.nextInt(100);
 				}
 
-			} else {// Ëæ»ú¼õ·¨
+			} else {// éšæœºå‡æ³•
 				while (a[i] - b[i] < 0) {
-					// Èç¹û²îĞ¡ÓÚ0ÖØĞÂËæ»ú
+					// å¦‚æœå·®å°äº0é‡æ–°éšæœº
 					a[i] = num1.nextInt(100);
 					b[i] = num2.nextInt(100);
 				}
@@ -268,7 +268,7 @@ public class MathExam6356 {
 	}
 
 	public static List<String> toInfixExpression(String s) {
-		List<String> infixorder = new ArrayList<String>();// ´æ´¢ÖĞĞò±í´ïÊ½
+		List<String> infixorder = new ArrayList<String>();// å­˜å‚¨ä¸­åºè¡¨è¾¾å¼
 		int w = 0;
 		String ssr;
 		char c;
@@ -302,9 +302,9 @@ public class MathExam6356 {
 					result = a + b;
 				} else if (ssr.equals("-")) {
 					result = a - b;
-				} else if (ssr.equals("¡Á")) {
+				} else if (ssr.equals("Ã—")) {
 					result = a * b;
-				} else if (ssr.equals("¡Â")) {
+				} else if (ssr.equals("Ã·")) {
 					result = a / b;
 				}
 				s.push("" + result);
@@ -313,7 +313,7 @@ public class MathExam6356 {
 		return Integer.parseInt(s.pop());
 	}
 
-	public static class Operation {// ÓÅÏÈ¼¶
+	public static class Operation {// ä¼˜å…ˆçº§
 		private int ADDITION = 1;
 		private int SUBTRACTION = 1;
 		private int MULTIPLICATION = 2;
@@ -332,14 +332,14 @@ public class MathExam6356 {
 			case "-":
 				result = SUBTRACTION;
 				break;
-			case "¡Á":
+			case "Ã—":
 				result = MULTIPLICATION;
 				break;
-			case "¡Â":
+			case "Ã·":
 				result = DIVISION;
 				break;
 			default:
-				// System.out.println("²»´æÔÚ¸ÃÔËËã·û");
+				// System.out.println("ä¸å­˜åœ¨è¯¥è¿ç®—ç¬¦");
 				result = 0;
 			}
 			return result;
