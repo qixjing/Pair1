@@ -1,5 +1,4 @@
 
-
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Random;
@@ -11,6 +10,7 @@ public class MathExam3 {
 	private static int grade = 0; // 年级
 	private static int numberOfTopics = 0; // 出题数
 	private Random random = new Random();
+	static int mod = 0;
 
 	public static void main(String[] args) {
 		checkInput(args);
@@ -18,31 +18,46 @@ public class MathExam3 {
 	}
 
 	private void start() {
-		System.out.println(grade);
+		StringBuffer topic1 = new StringBuffer("");
+		StringBuffer topic2 = new StringBuffer("");
+		StringBuffer topic3 = new StringBuffer("");
 		this.bean = new Bean();
 		if (grade == 1 || grade == 2) {
-			 for (int i = 0; i < numberOfTopics; i++) {
-			 String [] symbol = {"+","-","*","/"};
-			 String s = symbol[random.nextInt(4)];
-			 bean.setSymbol(s);
-			 Topic ran = TopicFactory.createRan(bean.getSymbol());
-			 String topic =ran.createTopic();
-			 StringBuffer topic1 = new StringBuffer(topic);
-			 PolishNotation po = new PolishNotation(topic1);
-			 int result = Integer.valueOf(po.calculate());
-			 System.out.println(topic1 + " = " + result);
-			 }
+			for (int i = 0; i < numberOfTopics; i++) {
+				String s=null;
+				if (grade == 1) {
+					String[] symbol = { "+", "-" };
+					s = symbol[random.nextInt(2)];
+				} else {
+					String[] symbol = { "*", "/" };
+					s = symbol[random.nextInt(2)];
+				}
+				bean.setSymbol(s);
+				Topic ran = TopicFactory.createRan(bean.getSymbol());
+				String topic = ran.createTopic();
+				PolishNotation po = new PolishNotation(new StringBuffer(topic));
+				String result = (po.calculate());
+				topic2.append("(" + (i + 1) + ") " + topic + "\n");
+				topic3.append("(" + (i + 1) + ") " + topic + " = " + result);
+				if (mod != 0) {
+					topic3.append("..." + mod);
+					mod = 0;
+				}
+				topic3.append("\n");
+
+			}
 		} else if (grade == 3) {
 			for (int i = 0; i < numberOfTopics; i++) {
-
 				TopicGradeThree topic = new TopicGradeThree();
-				StringBuffer topic1 = topic.createTopic();
+				topic1 = topic.createTopic();
 				PolishNotation po = new PolishNotation(topic1);
-				int result = Integer.valueOf(po.calculate());
-				System.out.println(topic1 + " = " + result);
+				String result = (po.calculate());
+				topic2.append("(" + (i + 1) + ") " + topic1 + "\n");
+				topic3.append("(" + (i + 1) + ") " + topic1 + " = " + result + "\n");
 			}
 		}
-
+		System.out.println(topic2);
+		System.out.println(topic3);
 		createMathExamTxt();
 	}
 

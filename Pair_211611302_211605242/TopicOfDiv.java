@@ -17,7 +17,9 @@ public class TopicOfDiv extends Topic {
 			result = randomA / randomB;
 			mod = randomA % randomB;
 		} while (result >= 10);
-		
+		if(mod!=0){
+			MathExam3.mod=mod;
+		}
 		return (randomA + " / " + randomB);
  	}
 
