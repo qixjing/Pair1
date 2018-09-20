@@ -486,7 +486,7 @@ public class MathExam {
 			 return number;
 		}
 		if(s1.equals("×")) {
-			number=(int)(Math.random()*(1000/answer))+1;
+			number=(int)(Math.random()*(2000/answer))+1;
 			return number;
 		}
 		if(s1.equals("÷")) {
@@ -494,7 +494,7 @@ public class MathExam {
 			number=(int)(Math.random()*(3000/answer)+1)*answer;
 			return number;}
 			else {
-				out3();
+				input();
 			}
 		}
 		return 0;
@@ -515,7 +515,7 @@ public class MathExam {
 			number=(int)(Math.random()*(1000/answer))+1;
 			return number;}
 			else {
-				number=(int)(Math.random()*(1000));}
+				number=(int)(Math.random()*(100));}
 		}
 		if(s.equals("÷")) {
 			if(answer==0) number=(int)(Math.random()*1000)+1;
