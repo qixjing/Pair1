@@ -1,4 +1,4 @@
-﻿package com.java328.MathExam;
+﻿package com.MathExam6331.java;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -153,14 +153,14 @@ public class MathExam {
 		else s2=sign2[c2];
 		int answer;
 		if(b1>=b2) {
-			number1=(int)(Math.random()*1000);
+			number1=(int)(Math.random()*100);
 			number2=sc1(s1,number1);
 			answer=calculate(number1, number2, s1);
 			number3=sc1(s2, answer);
 			answer=calculate(answer, number3, s2);
 		}
 		else {
-			number2=(int)(Math.random()*1000);
+			number2=(int)(Math.random()*100);
 			number3=sc1(s2,number2);
 			answer=calculate(number2, number3, s2);
 			number1=sc2(s1,answer);
@@ -193,7 +193,7 @@ public class MathExam {
 			else s2=sign2[c2];
 			int answer;
 			if(x==0) {
-				number1=(int)(Math.random()*1000);
+				number1=(int)(Math.random()*100);
 				number2=sc1(s1,number1);
 				answer=calculate(number1, number2, s1);
 				number3=sc1(s2, answer);
@@ -201,7 +201,7 @@ public class MathExam {
 				str="( "+String.valueOf(number1)+" "+s1+" "+String.valueOf(number2)+" ) "+s2+" "+String.valueOf(number3)+" = "+String.valueOf(answer);
 			}
 			else {
-				number2=(int)(Math.random()*1000);
+				number2=(int)(Math.random()*100);
 				number3=sc1(s2,number2);
 				answer=calculate(number2, number3, s2);
 				number1=sc2(s1,answer);
@@ -262,7 +262,7 @@ public class MathExam {
 			int answer;
 			int x=(int)(Math.random()*5);
 			if(x==0) {
-				number1=(int)(Math.random()*1000)+1;
+				number1=(int)(Math.random()*100)+1;
 				number2=sc1(s1, number1);
 				answer=calculate(number1, number2, s1);
 				if(b2>=b3) {
@@ -274,16 +274,16 @@ public class MathExam {
 					int p=sc1(s2, answer);
 					if(s3.equals("×")) {
 						if(p==0) {
-							number3=0;number4=(int)(Math.random()*1000)+1;
+							number3=0;number4=(int)(Math.random()*100)+1;
 						}else {
 						number3=sc1("÷", p);
 						number4=p/number3;
 						}
 					}else{
 						if(p==0) {
-							number3=0;number4=(int)(Math.random()*1000)+1;
+							number3=0;number4=(int)(Math.random()*100)+1;
 						}else {
-							number4=(int)(Math.random()*(1000/p));
+							number4=(int)(Math.random()*(100/p));
 							number4++;
 							number3=number4*p;
 						}
@@ -294,13 +294,13 @@ public class MathExam {
 			}
 			if(x==1) {
 				if(b1>=b2) {
-					number1=(int)(Math.random()*1000)+1;
+					number1=(int)(Math.random()*100)+1;
 					number2=sc1(s1, number1);
 					answer=calculate(number1, number2, s1);
 					number3=sc1(s2, answer);
 					answer=calculate(answer, number3, s2);
 				}else {
-					number2=(int)(Math.random()*1000)+1;
+					number2=(int)(Math.random()*100)+1;
 					number3=sc1(s2, number2);
 					answer=calculate(number2, number3, s2);
 					number1=sc2(s1, answer);
@@ -311,7 +311,7 @@ public class MathExam {
 				str="( "+String.valueOf(number1)+" "+s1+" "+String.valueOf(number2)+" "+s2+" "+String.valueOf(number3)+" ) "+s3+" "+String.valueOf(number4)+" = "+String.valueOf(answer);
 			}
 			if(x==2) {
-				number2=(int)(Math.random()*1000)+1;
+				number2=(int)(Math.random()*100)+1;
 				number3=sc1(s2, number2);
 				answer=calculate(number2, number3, s2);
 				if(b1>=b3) {
@@ -329,13 +329,13 @@ public class MathExam {
 			}
 			if(x==3) {
 				if(b2>=b3) {
-					number2=(int)(Math.random()*1000)+1;
+					number2=(int)(Math.random()*100)+1;
 					number3=sc1(s2, number2);
 					answer=calculate(number2, number3, s2);
 					number4=sc1(s3, answer);
 					answer=calculate(answer, number4, s3);
 				}else {
-					number3=(int)(Math.random()*1000)+1;
+					number3=(int)(Math.random()*100)+1;
 					number4=sc1(s3, number3);
 					answer=calculate(number3, number4, s3);
 					number2=sc2(s2, answer);
@@ -348,7 +348,7 @@ public class MathExam {
 			if(x==4) {
 				if(b1>=b2) {
 					int p;
-					number1=(int)(Math.random()*1000)+1;
+					number1=(int)(Math.random()*100)+1;
 					number2=sc1(s1, number1);
 					answer=calculate(number1, number2, s1);
 					p=sc1(s2, answer);
@@ -359,23 +359,23 @@ public class MathExam {
 						number4=(int)(Math.random()*(p/2))+1;
 						number3=p-number4;
 					}else if(s3.equals("×")) {
-						if(p==0) {number3=0;number4=(int)(Math.random()*1000)+1;}
+						if(p==0) {number3=0;number4=(int)(Math.random()*100)+1;}
 						else {
 						number3=sc1("÷", p);
 						number4=p/number3;
 						}
 					}else {
 						if(p==0) {
-							number3=0;number4=(int)(Math.random()*1000)+1;
+							number3=0;number4=(int)(Math.random()*100)+1;
 						}else {
-							number4=(int)(Math.random()*(1000/p));
+							number4=(int)(Math.random()*(100/p));
 							number4++;
 							number3=number4*p;
 						}
 					}
 					answer=calculate(answer, p, s2);
 				}else {
-					number3=(int)(Math.random()*1000)+1;
+					number3=(int)(Math.random()*100)+1;
 					number4=sc1(s3, number3);
 					answer=calculate(number3, number4, s3);
 					number2=sc2(s2, answer);
@@ -412,7 +412,7 @@ public class MathExam {
 		else s3=sign2[c3];
 		int answer=0;
 		if((b1==b2&&b2==b3)||(b1==1&&b2==0&&b3==0)||(b1==1&&b2==1&&b3==0)) {
-			number1=(int)(Math.random()*1000);
+			number1=(int)(Math.random()*100);
 			number2=sc1(s1, number1);
 			answer=calculate(number1, number2, s1);
 			number3=sc1(s2, answer);
