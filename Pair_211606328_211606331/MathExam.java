@@ -1,4 +1,4 @@
-package com.java328.MathExam;
+﻿package com.java328.MathExam;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,16 +36,21 @@ public class MathExam {
 	}
 	
 	public static void grade12(int n,int m){
-		int number1[]=new int[n];
-		int number2[]=new int[n];		
-		char sign[]=new char[n];
-		input1(number1, number2, sign,m);
-		int number4[]=calculate1(number1, sign, number2,m);
-		output1(number1, sign, number2, number4,m);
+		String[] str1=new String[n];
+		String[] str2=new String[n];
+		for (int i = 0; i < str1.length; i++) {
+			str1[i]=out1(m);
+		}
+		int q=0;
+		for (int i = 0; i < str1.length; i++) {
+			q=str1[i].indexOf("=");
+			str2[i]=str1[i].substring(0, q);
+		}
+		output(str1, str2);
 	}
 	
 	public static void grade3(int n) {
-		String[] str1=input2(n);
+		String[] str1=input(n);
 		String[] str2=new String[n];
 		int q=0;
 		for (int i = 0; i < str1.length; i++) {
@@ -70,14 +75,13 @@ public class MathExam {
 					 q=j;break;
 				}
 			}
-			System.out.println(str1[i].length()+","+q);
 			if(q<str1[i].length())
 			str2[i]=str1[i].substring(0, q);
 		}
-		output2(str1, str2);
+		output(str1, str2);
 	}
-	
-	public static String[] input2(int n) {
+		
+	public static String[] input(int n) {
 		String str[]=new String[n];
 		for (int i = 0; i < n; i++) {
 			int x=(int)(Math.random()*3)+2;
@@ -94,15 +98,36 @@ public class MathExam {
 		return str;
 	}
 	
-	public static String out1() {
+	public static String out1(int m) {
 		String sign[]= {"+","-","×","÷"};
 		String str;
-		int number1,number2;
-		int answer;
-		int a=(int)(Math.random()*4);
+		int number1=0,number2=0;
+		int answer,a;
+		if(m==1) {
+			a=(int)(Math.random()*2);
+		}else {
+			a=(int)(Math.random()*2)+2;
+		}
 		String s=sign[a];
-		number1=(int)(Math.random()*1000);
-		number2=sc1(s, number1);
+		number1=(int)(Math.random()*100);
+		if(s.equals("+")) {
+			 number2=(int)(Math.random()*(100-number1));
+		}
+		if(s.equals("-")) {
+			 number2=(int)(Math.random()*(number1));
+		}
+		if(s.equals("×")) {
+			if(number1!=0) {
+			number2=(int)(Math.random()*(100/number1));
+			}else {
+				number2=(int)(Math.random()*(100));}
+		}
+		if(s.equals("÷")) {
+			if(number1==0) number2=(int)(Math.random()*100)+1;
+			else{int[] yin=yinshu(number1);
+			number2=yin[(int)(Math.random()*(yin.length))];
+			}
+		}
 		answer=calculate(number1, number2, s);
 		str=String.valueOf(number1)+" "+s+" "+String.valueOf(number2)+" "+"="+" "+String.valueOf(answer);
 		return str;
@@ -475,28 +500,28 @@ public class MathExam {
 		return 0;
 	}
 	
-	public static int sc1(String s2,int answer) {
-		int number3 ;
-		if(s2.equals("+")) {
-			 number3=(int)(Math.random()*1000);
-			 return number3;
+	public static int sc1(String s,int answer) {
+		int number ;
+		if(s.equals("+")) {
+			 number=(int)(Math.random()*1000);
+			 return number;
 		}
-		if(s2.equals("-")) {
-			 number3=(int)(Math.random()*(answer));
-			 return number3;
+		if(s.equals("-")) {
+			 number=(int)(Math.random()*(answer));
+			 return number;
 		}
-		if(s2.equals("×")) {
+		if(s.equals("×")) {
 			if(answer!=0) {
-			number3=(int)(Math.random()*(1000/answer))+1;
-			return number3;}
+			number=(int)(Math.random()*(1000/answer))+1;
+			return number;}
 			else {
-				number3=(int)(Math.random()*(1000));}
+				number=(int)(Math.random()*(1000));}
 		}
-		if(s2.equals("÷")) {
-			if(answer==0) number3=(int)(Math.random()*1000)+1;
+		if(s.equals("÷")) {
+			if(answer==0) number=(int)(Math.random()*1000)+1;
 			else{int[] yin=yinshu(answer);
-			number3=yin[(int)(Math.random()*(yin.length))];
-			return number3;}
+			number=yin[(int)(Math.random()*(yin.length))];
+			return number;}
 		}
 		return 0;
 	}
@@ -523,73 +548,13 @@ public class MathExam {
 		if(s.equals("-")) return (a-b);
 		if(s.equals("×")) return (a*b);
 		if(s.equals("÷")&&b!=0) return (a/b);
-		else input2(1);;
+		else input(1);;
 		return 0;
 	}
 	public static boolean isNumber(String str) {
 		String regex="\\d*";
 		if(str.charAt(0)=='0'&&str.length()>1) return false;
 		return str.matches(regex);
-	}
-	
-	public static void input1(int[] a,int[] b,char[] d,int m) {
-		int t;
-		if(m==1) {
-			for (int i = 0; i < a.length; i++) {
-				a[i]=(int)(Math.random()*101);
-				b[i]=(int)(Math.random()*101);
-				t=(int)(Math.random()*2);
-				while(a[i]<b[i]&&t==1) {
-					a[i]=(int)(Math.random()*101);
-					b[i]=(int)(Math.random()*101);
-					t=(int)(Math.random()*2);
-				}
-				if(t==0) d[i]='+';
-				else d[i]='-';
-			}
-		}
-		if(m==2) {
-			for (int i = 0; i < a.length; i++) {
-				t=(int)(Math.random()*2);
-				if(t==0) {
-					a[i]=(int)(Math.random()*10);
-					b[i]=(int)(Math.random()*10);
-				}
-				else {
-					a[i]=(int)(Math.random()*82);
-					b[i]=(int)(Math.random()*9)+1;
-				}
-				if(t==0) d[i]='✖';
-				else d[i]='➗';
-			}
-		}
-	}
-	
-	public static int[] calculate1(int[] a,char[] b,int[] c,int m) {
-		int d[]=new int[a.length];
-		if(m==1) {
-			for (int i = 0; i < a.length; i++) {
-				if(b[i]=='+') d[i]=a[i]+c[i];
-				else d[i]=a[i]-c[i];
-			}
-			return d;
-		}
-		if(m==2) {
-			for (int i = 0; i < a.length; i++) {
-				if(b[i]=='✖') d[i]=a[i]*c[i];
-				else d[i]=a[i]/c[i];
-			}
-		}
-		return d;
-	}
-	
-	public static int[] calculate2(int[] a,char[] b,int[] c) {
-		int d[]=new int[a.length];
-		for (int i = 0; i < a.length; i++) {
-			if(b[i]=='✖') d[i]=0;
-			else d[i]=a[i]%c[i];
-		}
-		return d;
 	}
 	
 	public static void file(File file) {
@@ -607,59 +572,7 @@ public class MathExam {
 		}
 	}
 	
-	public static void output1(int[] number1,char[] sign,int[] number2,int[] number4,int m){
-		String filename="d:\\out.txt";
-		File file=new File(filename);
-		file(file);
-		String str="\r\n";
-		String str1[] = new String[number1.length];
-		String str2[] =new String[number1.length];
-		OutputStream out;
-		try {
-			out = new FileOutputStream(file);
-			for (int i = 0; i < number1.length; i++) {
-				str1[i]="("+String.valueOf(i+1)+") "+String.valueOf(number1[i])+" "+String.valueOf(sign[i])+" "+String.valueOf(number2[i])+" =\r\n";
-				try {
-					out.write(str1[i].getBytes());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				out.write(str.getBytes());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			for (int i = 0; i < number1.length; i++) {
-				if(m==1) {str2[i]="("+String.valueOf(i+1)+") "+String.valueOf(number1[i])+" "+String.valueOf(sign[i])+" "+String.valueOf(number2[i])+" = "+String.valueOf(number4[i])+"\r\n";}
-				if(m==2) {
-					int number5[]=calculate2(number1, sign, number2);
-					if(number5[i]==0) str2[i]="("+String.valueOf(i+1)+") "+String.valueOf(number1[i])+" "+String.valueOf(sign[i])+" "+String.valueOf(number2[i])+" = "+String.valueOf(number4[i])+"\r\n";
-					else str2[i]="("+String.valueOf(i+1)+") "+String.valueOf(number1[i])+" "+String.valueOf(sign[i])+" "+String.valueOf(number2[i])+" = "+String.valueOf(number4[i])+"..."+String.valueOf(number5[i])+"\r\n";
-				}
-				try {
-					out.write(str2[i].getBytes());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public static void output2(String[] str1,String[] str2){
+	public static void output(String[] str1,String[] str2){
 		String filename="d:\\out.txt";
 		File file=new File(filename);
 		file(file);
